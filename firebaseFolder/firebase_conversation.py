@@ -5,6 +5,7 @@ from typing import List
 
 
 from firebaseFolder.firebase_connection import FirebaseConnection
+from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 
 from utils.patterns import singleton
 
