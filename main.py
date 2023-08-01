@@ -2,7 +2,7 @@ from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 
 
-def get_all_conversations():
+def get_all_conversations(request=None):
     fc = FirebaseConnection()
     fcm = FirebaseConversation(fc)
     return fcm.getAllConversations()
