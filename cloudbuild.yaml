@@ -9,5 +9,5 @@ steps:
   - --entry-point=get_all_conversations
   - --trigger-http
   - --allow-unauthenticated
-  - --stage-bucket=gcf-sources-798954827743-us-central1
+  - --stage-bucket=firebase_code_bucket
   - --update-env-vars=GOOGLE_FUNCTION_TARGET=get_all_conversations
