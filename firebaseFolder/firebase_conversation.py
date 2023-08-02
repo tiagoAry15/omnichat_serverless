@@ -110,21 +110,6 @@ class FirebaseConversation(FirebaseWrapper):
         return self.firebaseConnection.deleteAllData()
 
 
-def getDummyConversationDicts(username: str = "John", phoneNumber: str = "+558599171902", _from: str = "whatsapp"):
-    dummyBodyMessages = ["Olá, tudo bem?", "Sim estou bem, e você?", "Estou bem também, obrigado por perguntar!"]
-    dummyMessagePot = []
-    for index, body in enumerate(dummyBodyMessages):
-        currentFormattedTimestamp = datetime.datetime.now().strftime("%H:%M")
-        sender = "ChatBot" if index % 2 == 1 else username
-        message = {"body": body, "id": random.randint(0, 10000000000), "phoneNumber": phoneNumber,
-                   "sender": sender, "timestamp": currentFormattedTimestamp}
-        dummyMessagePot.append(message)
-
-    dummyPot = [{"from": _from, "id": 3, "name": username, "phoneNumber": phoneNumber, "status": "active",
-                 "messagePot": dummyMessagePot, "lastMessage": dummyMessagePot[-1], "unreadMessages": 1}]
-    return {"dummyMessagePot": dummyMessagePot, "dummyPot": dummyPot}
-
-
 # def __createDummyConversations():
 #     fc = FirebaseConnection()
 #     fcm = FirebaseConversation(fc)
