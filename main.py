@@ -9,7 +9,10 @@ def get_all_conversations(request=None):
     fcm = FirebaseConversation(fc)
     conversations = fcm.getAllConversations()
     response = JsonResponse(conversations)
-    return conversations
+    response["Access-Control-Allow-Origin"] = "*"
+    response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+    return response
 
 
 def create_dummy_conversations(request=None):
