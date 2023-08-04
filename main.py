@@ -1,5 +1,6 @@
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
+from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import createDummyConversations
 from django.http import JsonResponse
 
@@ -8,11 +9,7 @@ def get_all_conversations(request=None):
     fc = FirebaseConnection()
     fcm = FirebaseConversation(fc)
     conversations = fcm.getAllConversations()
-    response = JsonResponse(conversations)
-    response["Access-Control-Allow-Origin"] = "*"
-    response["Access-Control-Allow-Methods"] = "GET, OPTIONS"
-    response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-    return response
+    return createResponseWithAntiCorsHeaders(conversations)
 
 
 def create_dummy_conversations(request=None):
