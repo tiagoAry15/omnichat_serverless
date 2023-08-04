@@ -1,12 +1,15 @@
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.createDummyConversations import createDummyConversations
+from django.http import JsonResponse
 
 
 def get_all_conversations(request=None):
     fc = FirebaseConnection()
     fcm = FirebaseConversation(fc)
-    return fcm.getAllConversations()
+    conversations = fcm.getAllConversations()
+    response = JsonResponse(conversations)
+    return conversations
 
 
 def create_dummy_conversations(request=None):
