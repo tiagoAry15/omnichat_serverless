@@ -2,7 +2,6 @@ from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import createDummyConversations
-from django.http import JsonResponse
 
 
 def get_all_conversations(request=None):
