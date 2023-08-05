@@ -8,7 +8,8 @@ def get_all_conversations(request=None):
     fc = FirebaseConnection()
     fcm = FirebaseConversation(fc)
     conversations = fcm.getAllConversations()
-    return createResponseWithAntiCorsHeaders(conversations)
+    arrayOfConversations = list(conversations.values())
+    return createResponseWithAntiCorsHeaders(arrayOfConversations)
 
 
 def create_dummy_conversations(request=None):
