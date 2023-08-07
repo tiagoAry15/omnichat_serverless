@@ -1,14 +1,18 @@
+from flask import Flask
+
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import createDummyConversations
+
+app = Flask(__name__)
 
 
 def get_all_conversations(request=None):
     fc = FirebaseConnection()
     fcm = FirebaseConversation(fc)
     conversations = fcm.getAllConversations()
-    arrayOfConversations = list(conversations.values())
+    arrayOfConversations = list(conversations.values()) if conversations is not None else ["None"]
     return createResponseWithAntiCorsHeaders(arrayOfConversations)
 
 

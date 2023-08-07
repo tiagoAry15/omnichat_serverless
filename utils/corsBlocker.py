@@ -1,9 +1,13 @@
-from flask import jsonify
+import json
+
+from flask import jsonify, Response
 
 
 def createResponseWithAntiCorsHeaders(data):
-    response = jsonify(data)
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Headers", "*")
-    response.headers.add("Access-Control-Allow-Methods", "*")
-    return response
+    dump_response = json.dumps(data)
+    response_headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "*"
+    }
+    return Response(dump_response, headers=response_headers)
