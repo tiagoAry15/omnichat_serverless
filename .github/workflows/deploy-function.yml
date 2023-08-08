@@ -24,13 +24,7 @@ jobs:
         env:
           FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
         run: |
-          # Iterate through all environment variables (including secrets)
-          for secret_var in $(printenv); do
-            IFS="=" read -ra var <<< "$secret_var"  # Split variable into name and value
-            var_name=${var[0]}
-            var_value=${var[1]}
-            echo "Variable: $var_name = $var_value"
-          done
+          echo "$FIREBASE_SDK_TYPE"
           gcloud functions deploy get_all_conversations \
             --source=. \
             --runtime=python39 \
