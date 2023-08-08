@@ -31,3 +31,5 @@ def createDummyConversations(dictParameters: Tuple):
     for _dict in dictPot:
         for conversation in _dict["dummyPot"]:
             fcm.createConversation(conversation)
+
+
