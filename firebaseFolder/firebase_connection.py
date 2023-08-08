@@ -8,6 +8,7 @@ from utils.patterns import singleton
 
 def getFirebaseCredentials():
     load_dotenv()
+    print(f"ENVIRONMENT VARIABLES: {list(os.environ)}")
     firebase_credentials = {
         "type": os.environ["FIREBASE_SDK_TYPE"],
         "project_id": os.environ["FIREBASE_SDK_PROJECT_ID"],
