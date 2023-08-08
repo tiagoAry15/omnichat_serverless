@@ -1,3 +1,4 @@
+import logging
 import os
 import firebase_admin
 from dotenv import load_dotenv
@@ -5,10 +6,12 @@ from firebase_admin import credentials, db
 from references.path_reference import getFirebaseSDKPath
 from utils.patterns import singleton
 
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
+
 
 def getFirebaseCredentials():
     load_dotenv()
-    print(f"ENVIRONMENT VARIABLES: {list(os.environ)}")
+    logging.debug(f"ENVIRONMENT VARIABLES: {list(os.environ)}")
     firebase_credentials = {
         "type": os.environ["FIREBASE_SDK_TYPE"],
         "project_id": os.environ["FIREBASE_SDK_PROJECT_ID"],
