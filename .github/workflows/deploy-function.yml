@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: false  # Workflow will never run due to the condition
+#    if: false  # Workflow will never run due to the condition
     env:
       FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
