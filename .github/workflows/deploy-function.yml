@@ -24,7 +24,10 @@ jobs:
         env:
           FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
         run: |
-          echo "FIREBASE_SDK_TYPE: $FIREBASE_SDK_TYPE"
+          # Iterate through all environment variables (including secrets)
+          for secret_var in $(printenv); do
+            echo "$secret_var"
+          done
           gcloud functions deploy get_all_conversations \
             --source=. \
             --runtime=python39 \
