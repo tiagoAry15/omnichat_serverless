@@ -24,8 +24,10 @@ jobs:
       - name: Deploy Cloud Function
         env:
           FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
+          TEST_SECRET: ${{ secrets.TEST_SECRET }}
         run: |
-          echo "$FIREBASE_SDK_TYPE"
+          echo "VARIABLE: FIREBASE_SDK_TYPE VALUE: $FIREBASE_SDK_TYPE"
+          echo "VARIABLE: TEST_SECRET VALUE: $TEST_SECRET"
           gcloud functions deploy get_all_conversations \
             --source=. \
             --runtime=python39 \
