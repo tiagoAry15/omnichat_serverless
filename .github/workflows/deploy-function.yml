@@ -8,7 +8,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: coreEnvironment
+    env:
+      FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
+      TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     steps:
       - name: Checkout Repository
@@ -22,9 +24,6 @@ jobs:
           export_default_credentials: true
 
       - name: Deploy Cloud Function
-        env:
-          FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
-          TEST_SECRET: ${{ secrets.TEST_SECRET }}
         run: |
           echo "VARIABLE: FIREBASE_SDK_TYPE VALUE: $FIREBASE_SDK_TYPE"
           echo "VARIABLE: TEST_SECRET VALUE: $TEST_SECRET"
