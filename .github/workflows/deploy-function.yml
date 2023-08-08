@@ -3,7 +3,7 @@ name: Deploy Cloud Function
 on:
   push:
     branches:
-      - main  # Adjust to your main branch name.
+      - main  # Adjust to your main branch name
 
 jobs:
   deploy:
