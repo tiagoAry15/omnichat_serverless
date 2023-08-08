@@ -35,7 +35,7 @@ def __generateRandomTime():
     return f"{hour:02d}:{minute:02d}"
 
 
-def add_minutes_to_time(timeString: str, minutesToAdd: int) -> str:
+def __updateTimeWithMinutes(timeString: str, minutesToAdd: int) -> str:
     # Convert the input time string to a datetime object
     inputTime = datetime.strptime(timeString, "%H:%M")
 
@@ -60,5 +60,19 @@ def generateRandomMessagePot(size: int, senderName: str, _from: str, phoneNumber
                             "phoneNumber": phoneNumber, "sender": sender, "timestamp": startingTime}
         pot.append(conversationDict)
         currentIndex += 1
-        startingTime = add_minutes_to_time(startingTime, 1)
+        startingTime = __updateTimeWithMinutes(startingTime, 1)
     return pot
+
+
+def generateRandomDummyConversation():
+    _from = random.choice(["whatsapp", "messenger", "facebook"])
+    _id = createRandomIdString()
+    timestamp = generateRandomFloatInRange(1691438953)
+    name = random.choice(["John", "Maria", "Anthony", "Peter", "Paul", "Mary", "Joseph", "Max", "Jack", "Jill"])
+    phoneNumber = generateRandomPhoneNumber()
+    status = "active"
+    unreadMessages = 0
+    randomSize = random.randint(3, 9)
+    messagePot = generateRandomMessagePot(size=randomSize, senderName=name, phoneNumber=phoneNumber, _from=_from)
+    return {"from": _from, "id": _id, "lastMessage_timestamp": timestamp, "messagePot": messagePot, "name": name,
+            "phoneNumber": phoneNumber, "status": status, "unreadMessages": unreadMessages}

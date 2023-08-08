@@ -1,8 +1,8 @@
 import datetime
 import random
 import uuid
+from enum import Enum
 from typing import List
-
 
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
@@ -33,16 +33,19 @@ class FirebaseConversation(FirebaseWrapper):
                 return uniqueId
         return None
 
-    def appendMessageToWhatsappNumber(self, messageData: dict, whatsappNumber: str):
-        uniqueId = self.getUniqueIdByWhatsappNumber(whatsappNumber)
-        if not uniqueId:
+    def appendMessageToWhatsappNumber(self, whatsappNumber: str, body: str, sender: str):
+        messageData = {"body": body, "time": datetime.datetime.now().strftime("%H:%M"), "id": str(uuid.uuid4())}
+        conversationUniqueId = self.getUniqueIdByWhatsappNumber(whatsappNumber)
+        if not conversationUniqueId:
             return False
-        conversationData = self.firebaseConnection.readData(path=uniqueId)
+        conversationData = self.firebaseConnection.readData(path=conversationUniqueId)
+        messageData["phoneNumber"] = conversationData["phoneNumber"]
+        senderName = "bot" if sender == "bot" else conversationData["name"]
+        messageData["sender"] = senderName
         if "messagePot" not in conversationData:
             conversationData["messagePot"] = []
-        messageData["id"] = str(uuid.uuid4())
         conversationData["messagePot"].append(messageData)
-        self.firebaseConnection.overWriteData(path=uniqueId, data=conversationData)
+        self.firebaseConnection.overWriteData(path=conversationUniqueId, data=conversationData)
         return messageData
 
     def retrieveAllMessagesByWhatsappNumber(self, whatsappNumber: str) -> List[dict] or None:
@@ -86,7 +89,7 @@ class FirebaseConversation(FirebaseWrapper):
             else False
         )
 
-    def updateConversationAddingUnreadMessages(self, messageData: dict) -> bool:
+    def updateConversationAddingUnreadMessages(self, messageData: dict) -> bool or None:
         uniqueId = self.getUniqueIdByWhatsappNumber(messageData["phoneNumber"])
         if not uniqueId:
             return None
@@ -110,21 +113,6 @@ class FirebaseConversation(FirebaseWrapper):
         return self.firebaseConnection.deleteAllData()
 
 
-# def __createDummyConversations():
-#     fc = FirebaseConnection()
-#     fcm = FirebaseConversation(fc)
-#     dictPot = []
-#     dictParameters = ("John", "+558599171902", "whatsapp",
-#                       "Maria", "+558599171903", "instagram",
-#                       "Anthony", "+558599171904", "facebook")
-#     for username, phoneNumber, _from in zip(dictParameters[::3], dictParameters[1::3], dictParameters[2::3]):
-#         dicts = getDummyConversationDicts(username=username, phoneNumber=phoneNumber, _from=_from)
-#         dictPot.append(dicts)
-#     for _dict in dictPot:
-#         for conversation in _dict["dummyPot"]:
-#             fcm.createConversation(conversation)
-
-
 def checkNewUser(whatsappNumber: str, numberPot: List[str],
                  conversationInstance: FirebaseConversation, msgDict: dict) -> bool:
     if whatsappNumber in numberPot:
@@ -142,15 +130,7 @@ def __main():
     currentTime = datetime.datetime.now().strftime("%H:%M")
     msgDict = {"body": "Olá, tudo bem?", "id": str(uuid.uuid4()), "phoneNumber": "+5585999171902",
                "sender": "Mateus", "time": datetime.datetime.now().strftime("%H:%M")}
-    fcm.appendMessageToWhatsappNumber(msgDict, "+5585999171902")
-    # msgDict = {"phoneNumber": "+5585994875485", "body": "Olá, tudo bem?", "name": "Maria", "from": "facebook"}
-    # fcm.createFirstDummyConversationByWhatsappNumber(msgDict)
-    # createDummyConversations()
-    # fcm.deleteAllConversations()
-    # fcm.appendMessageToWhatsappNumber({"message": "Olá, tudo bem?"}, "whatsapp:+5585994875482")
-    # fc = FirebaseConnection()
-    # fm = FirebaseConversation(fc)
-    # print(fm.existingConversation({"conversationId": "1"}))
+    fcm.appendMessageToWhatsappNumber(msgDict, "+558599663533")
 
 
 if __name__ == "__main__":

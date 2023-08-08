@@ -11,7 +11,7 @@ def singleton(cls):
 
 def update_connection_decorator(func):
     def wrapper(self, *args, **kwargs):
-        self.updateConnection()
+        self.updateCurrentConnection()
         return func(self, *args, **kwargs)
 
     return wrapper
