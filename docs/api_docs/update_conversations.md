@@ -25,7 +25,7 @@ POST /update_conversation HTTP/1.1
 Host: your-api-host.com
 whatsappNumber: '+558599663533'
 body: 'New message content'
-sender: 'Your Name'
+sender: 'Bot'
 ```
 
 ### Response Example

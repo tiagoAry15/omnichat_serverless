@@ -3,10 +3,7 @@ import os
 import firebase_admin
 from dotenv import load_dotenv
 from firebase_admin import credentials, db
-from references.path_reference import getFirebaseSDKPath
 from utils.patterns import singleton
-
-logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
 
 
 def getFirebaseCredentials():

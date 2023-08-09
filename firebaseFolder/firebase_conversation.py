@@ -34,10 +34,16 @@ class FirebaseConversation(FirebaseWrapper):
         return None
 
     def appendMessageToWhatsappNumber(self, whatsappNumber: str, body: str, sender: str):
+        if not body:
+            return 400, "Body is empty."
+        if not whatsappNumber:
+            return 400, "Whatsapp number is empty."
+        if not sender:
+            return 400, "Sender is empty."
         messageData = {"body": body, "time": datetime.datetime.now().strftime("%H:%M"), "id": str(uuid.uuid4())}
         conversationUniqueId = self.getUniqueIdByWhatsappNumber(whatsappNumber)
         if not conversationUniqueId:
-            return False
+            return 400, f"Conversation not found for whatsappNumber: {whatsappNumber}"
         conversationData = self.firebaseConnection.readData(path=conversationUniqueId)
         messageData["phoneNumber"] = conversationData["phoneNumber"]
         senderName = "bot" if sender == "bot" else conversationData["name"]
@@ -46,7 +52,7 @@ class FirebaseConversation(FirebaseWrapper):
             conversationData["messagePot"] = []
         conversationData["messagePot"].append(messageData)
         self.firebaseConnection.overWriteData(path=conversationUniqueId, data=conversationData)
-        return messageData
+        return 200, "Conversation updated successfully."
 
     def retrieveAllMessagesByWhatsappNumber(self, whatsappNumber: str) -> List[dict] or None:
         uniqueId = self.getUniqueIdByWhatsappNumber(whatsappNumber)

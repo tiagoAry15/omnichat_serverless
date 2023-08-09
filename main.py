@@ -2,6 +2,7 @@ from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import createDummyConversations
+from utils.mocks import MockRequest
 
 fc = FirebaseConnection()
 fcm = FirebaseConversation(fc)
@@ -18,8 +19,7 @@ def update_conversation(request=None):
     whatsappNumber = headers.get("whatsappNumber", None)
     body = headers.get("body", None)
     sender = headers.get("sender", None)
-    fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
-    return 200, "Conversation updated successfully."
+    return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
 
 
 def create_dummy_conversations(request=None):
@@ -31,8 +31,7 @@ def create_dummy_conversations(request=None):
 
 
 def __main():
-    aux = get_all_conversations()
-    print(aux)
+
     return
 
 
