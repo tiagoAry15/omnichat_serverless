@@ -48,18 +48,18 @@
 ````
 
 **Response Description:**
-- `from`: The platform from which the message was sent (e.g., WhatsApp)
-- `id`: The conversation unique identifier
-- `lastMessage_timestamp`: The timestamp indicating when the last message was received.
+- `from`: The platform from which the message was sent _(WhatsApp)_
+- `id`: The conversation unique identifier _('44b81003-9e4e-4164')_
+- `lastMessage_timestamp`: The timestamp indicating when the last message was received. _('09:19')_
 - `messagePot`: An array containing all the messages exchanged in the conversation.
-- `messagePot.body`: The message body.
-- `messagePot.from`: The platform from which the message was sent (e.g., WhatsApp)
-- `messagePot.id`: The message unique identifier
-- `messagePot.phoneNumber`: The phone number of the message sender.
-- `messagePot.sender`: The name of the message sender.
-- `messagePot.time`: The timestamp indicating when the message was received.
-- `name`: The name of the conversation owner.
-- `phoneNumber`: The phone number of the conversation owner.
-- `status`: The conversation status (e.g., active).
-- `unreadMessages`: The number of unread messages in the conversation.
+- `messagePot.body`: The message body. _('oi')_
+- `messagePot.from`: The platform from which the message was sent _(WhatsApp)_
+- `messagePot.id`: The message unique identifier _('06c8681b-b9d9-4daf')_
+- `messagePot.phoneNumber`: The phone number of the message sender. _('+558599663533')_
+- `messagePot.sender`: The name of the message sender. _('Tiago Ary')_
+- `messagePot.time`: The timestamp indicating when the message was received. _('09:19')_
+- `name`: The name of the conversation owner. _('Tiago Ary')_
+- `phoneNumber`: The phone number of the conversation owner. _('+558599663533')_
+- `status`: The conversation status (e.g., active). _('active')_
+- `unreadMessages`: The number of unread messages in the conversation. _(0)_
 
