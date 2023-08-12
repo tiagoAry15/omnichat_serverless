@@ -21,15 +21,15 @@ def __getDummyConversationDicts(username: str = "John", phoneNumber: str = "+558
     return {"dummyMessagePot": dummyMessagePot, "dummyPot": dummyPot}
 
 
-def createDummyConversations(dictParameters: Tuple):
-    fc = FirebaseConnection()
-    fcm = FirebaseConversation(fc)
+def createDummyConversations(inputFcInstance: FirebaseConnection, inputFcmInstance: FirebaseConversation,
+                             dictParameters: Tuple):
+    inputFcmInstance.setConnectionInstance(inputFcInstance)
     dictPot = []
     for username, phoneNumber, _from in zip(dictParameters[::3], dictParameters[1::3], dictParameters[2::3]):
         dicts = __getDummyConversationDicts(username=username, phoneNumber=phoneNumber, _from=_from)
         dictPot.append(dicts)
     for _dict in dictPot:
         for conversation in _dict["dummyPot"]:
-            fcm.createConversation(conversation)
+            inputFcmInstance.createConversation(conversation)
 
 

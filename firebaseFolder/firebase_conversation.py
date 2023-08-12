@@ -16,6 +16,9 @@ class FirebaseConversation(FirebaseWrapper):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
 
+    def setConnectionInstance(self, inputFirebaseConnection: FirebaseConnection):
+        self.firebaseConnection = inputFirebaseConnection
+
     def updateConnection(self):
         self.firebaseConnection.changeDatabaseConnection("conversations")
 
