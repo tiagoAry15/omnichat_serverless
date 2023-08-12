@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-#    if: false  # Workflow will never run due to the condition
     env:
       FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
@@ -34,3 +33,25 @@ jobs:
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=GOOGLE_FUNCTION_TARGET=get_all_conversations
+
+      - name: Deploy create_dummy_conversations Cloud Function
+        run: |
+          gcloud functions deploy create_dummy_conversations \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=create_dummy_conversations \
+            --trigger-http \
+            --allow-unauthenticated \
+            --stage-bucket=firebase_code_bucket \
+            --update-env-vars=GOOGLE_FUNCTION_TARGET=create_dummy_conversations
+
+      - name: Deploy update_conversation Cloud Function
+        run: |
+          gcloud functions deploy update_conversation \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=update_conversation \
+            --trigger-http \
+            --allow-unauthenticated \
+            --stage-bucket=firebase_code_bucket \
+            --update-env-vars=GOOGLE_FUNCTION_TARGET=update_conversation
