@@ -45,7 +45,6 @@ class FirebaseConversation(FirebaseWrapper):
         if not conversationUniqueId:
             return 400, f"Conversation not found for whatsappNumber: {whatsappNumber}"
         conversationData = self.firebaseConnection.readData(path=conversationUniqueId)
-        messageData["phoneNumber"] = conversationData["phoneNumber"]
         senderName = "bot" if sender == "bot" else conversationData["name"]
         messageData["sender"] = senderName
         if "messagePot" not in conversationData:
@@ -63,7 +62,7 @@ class FirebaseConversation(FirebaseWrapper):
             return None
         return conversationData["messagePot"]
 
-    def createFirstDummyConversationByWhatsappNumber(self, msgDict: dict):
+    def createFirstPlaceholderConversationByWhatsappNumber(self, msgDict: dict):
         whatsappNumber = msgDict.get("phoneNumber", None)
         body = msgDict.get("body", None)
         name = msgDict.get("name", None)
@@ -124,7 +123,7 @@ def checkNewUser(whatsappNumber: str, numberPot: List[str],
     if whatsappNumber in numberPot:
         return False
     numberPot.append(whatsappNumber)
-    conversationInstance.createFirstDummyConversationByWhatsappNumber(msgDict)
+    conversationInstance.createFirstPlaceholderConversationByWhatsappNumber(msgDict)
     return True
 
 

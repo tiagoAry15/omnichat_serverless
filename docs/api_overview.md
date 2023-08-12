@@ -3,34 +3,20 @@
 This API provides access to several endpoints related to queries and data manipulation.
 The API is built using Google Cloud Functions and communicates with Firebase for data storage and retrieval.
 
-## Endpoints
+## Functions
 
-### [Homepage](api/homepage.md)
+### [Get All Conversations](api_docs/get_all_conversations.md)
 
-This is a basic endpoint that returns a "Hello World!" message.
+This is a basic endpoint that returns all the conversations stored in the database.
 
-- Path: `/`
+- URL: `https://us-central1-pizzadobill-rpin.cloudfunctions.net/get_all_conversations`
 - Method: `GET`
 
-### [Get All Queries](api/get_all_queries.md)
+### [Update Conversations](api_docs/update_conversations.md)
 
-This endpoint retrieves all queries from the database.
+This endpoint updates a given conversation stored in the database.
 
 - Path: `/get_all_queries`
-- Method: `GET`
-
-### [Get All Flights](api/get_all_flights.md)
-
-This endpoint retrieves all flight information from the database.
-
-- Path: `/get_all_flights`
-- Method: `GET`
-
-### [Get All Users](api/get_all_users.md)
-
-This endpoint retrieves all user information from the database.
-
-- Path: `/get_all_users`
-- Method: `GET`
+- Method: `POST`
 
 For more detailed information about each endpoint, click on the endpoint name to access its full documentation.
