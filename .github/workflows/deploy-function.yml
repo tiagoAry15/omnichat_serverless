@@ -48,7 +48,7 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-            --update-env-vars=GOOGLE_FUNCTION_TARGET=create_dummy_conversations
+            --update-env-vars=GOOGLE_FUNCTION_TARGET=create_dummy_conversations,FIREBASE_SDK_TYPE=${{ secrets.FIREBASE_SDK_TYPE }},TEST_SECRET=${{ secrets.TEST_SECRET }}
 
       - name: Deploy update_conversation Cloud Function
         run: |
