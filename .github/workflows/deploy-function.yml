@@ -25,7 +25,7 @@ jobs:
 
       - name: Deploy get_all_conversations Cloud Function
         run: |
-          gcloud functions deploy get_all_conversations \
+          gcloud functions deploy get_all_conversations --verbosity=debug\
             --source=. \
             --runtime=python39 \
             --entry-point=get_all_conversations \
@@ -36,7 +36,7 @@ jobs:
 
       - name: Deploy create_dummy_conversations Cloud Function
         run: |
-          gcloud functions deploy create_dummy_conversations \
+          gcloud functions deploy create_dummy_conversations --verbosity=debug\
             --source=. \
             --runtime=python39 \
             --entry-point=create_dummy_conversations \

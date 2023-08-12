@@ -1,6 +1,10 @@
+from typing import List
+
+
 class MockRequest:
-    def __init__(self, headers):
+    def __init__(self, headers: List[str] = None, method: str = "GET"):
         self.headers = headers
+        self.method = method
 
 
 def test_create_conversation_mock(phoneNumber: str = "+558599171902", body: str = "Olá!", sender: str = "John"):

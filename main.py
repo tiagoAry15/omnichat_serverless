@@ -37,6 +37,8 @@ def update_conversation(request=None):
 
 
 def __main():
+    dummy_request = MockRequest(method="POST")
+    create_dummy_conversations(dummy_request)
     return
 
 
