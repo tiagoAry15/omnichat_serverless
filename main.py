@@ -1,7 +1,7 @@
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
-from utils.createDummyConversations import createDummyConversations
+from utils.createDummyConversations import getDummyConversationDicts
 from utils.mocks import MockRequest
 
 fc = FirebaseConnection()
@@ -14,7 +14,13 @@ def create_dummy_conversations(request=None):
     dictParameters = ("John", "+558599171902", "whatsapp",
                       "Maria", "+558599171903", "instagram",
                       "Anthony", "+558599171904", "messenger")
-    createDummyConversations(inputFcInstance=fc, inputFcmInstance=fcm, dictParameters=dictParameters)
+    dictPot = []
+    for username, phoneNumber, _from in zip(dictParameters[::3], dictParameters[1::3], dictParameters[2::3]):
+        dicts = getDummyConversationDicts(username=username, phoneNumber=phoneNumber, _from=_from)
+        dictPot.append(dicts)
+    for _dict in dictPot:
+        for conversation in _dict["dummyPot"]:
+            fcm.createConversation(conversation)
     return 200, "Dummy conversations created successfully."
 
 
