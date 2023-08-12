@@ -28,8 +28,19 @@ jobs:
           echo "FIREBASE_SDK_TYPE=${FIREBASE_SDK_TYPE}" >> $GITHUB_ENV
           echo "TEST_SECRET=${TEST_SECRET}" >> $GITHUB_ENV
 
-      - name: Deploy get_all_conversations Cloud Function
+      - name: Deploy Cloud Functions
         run: |
+          ENV_VARS_LIST="FIREBASE_SDK_TYPE,FIREBASE_SDK_PROJECT_ID,TEST_SECRET"  # Add other environment variable names separated by commas
+          UPDATE_ENV_VARS_ARG=""
+
+          # Construct the --update-env-vars argument
+          IFS=',' read -ra ENV_VARS_ARRAY <<< "$ENV_VARS_LIST"
+          for VAR_NAME in "${ENV_VARS_ARRAY[@]}"; do
+            UPDATE_ENV_VARS_ARG+="$VAR_NAME=${!VAR_NAME},"
+          done
+          UPDATE_ENV_VARS_ARG=${UPDATE_ENV_VARS_ARG%}  # Remove trailing comma
+
+          # Deploy get_all_conversations Cloud Function
           gcloud functions deploy get_all_conversations\
             --source=. \
             --runtime=python39 \
@@ -37,10 +48,9 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-            --update-env-vars=GOOGLE_FUNCTION_TARGET=get_all_conversations
-
-      - name: Deploy create_dummy_conversations Cloud Function
-        run: |
+            --update-env-vars=$UPDATE_ENV_VARS_ARG
+          
+          # Deploy create_dummy_conversations Cloud Function
           gcloud functions deploy create_dummy_conversations\
             --source=. \
             --runtime=python39 \
@@ -48,15 +58,37 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-            --update-env-vars=GOOGLE_FUNCTION_TARGET=create_dummy_conversations,FIREBASE_SDK_TYPE=${{ secrets.FIREBASE_SDK_TYPE }},TEST_SECRET=${{ secrets.TEST_SECRET }}
+            --update-env-vars=$UPDATE_ENV_VARS_ARG
 
-      - name: Deploy update_conversation Cloud Function
-        run: |
-          gcloud functions deploy update_conversation \
-            --source=. \
-            --runtime=python39 \
-            --entry-point=update_conversation \
-            --trigger-http \
-            --allow-unauthenticated \
-            --stage-bucket=firebase_code_bucket \
-            --update-env-vars=GOOGLE_FUNCTION_TARGET=update_conversation
+#      - name: Deploy get_all_conversations Cloud Function
+#        run: |
+#          gcloud functions deploy get_all_conversations\
+#            --source=. \
+#            --runtime=python39 \
+#            --entry-point=get_all_conversations \
+#            --trigger-http \
+#            --allow-unauthenticated \
+#            --stage-bucket=firebase_code_bucket \
+#            --update-env-vars=GOOGLE_FUNCTION_TARGET=get_all_conversations
+#
+#      - name: Deploy create_dummy_conversations Cloud Function
+#        run: |
+#          gcloud functions deploy create_dummy_conversations\
+#            --source=. \
+#            --runtime=python39 \
+#            --entry-point=create_dummy_conversations \
+#            --trigger-http \
+#            --allow-unauthenticated \
+#            --stage-bucket=firebase_code_bucket \
+#            --update-env-vars=GOOGLE_FUNCTION_TARGET=create_dummy_conversations,FIREBASE_SDK_TYPE=${{ secrets.FIREBASE_SDK_TYPE }},TEST_SECRET=${{ secrets.TEST_SECRET }}
+#
+#      - name: Deploy update_conversation Cloud Function
+#        run: |
+#          gcloud functions deploy update_conversation \
+#            --source=. \
+#            --runtime=python39 \
+#            --entry-point=update_conversation \
+#            --trigger-http \
+#            --allow-unauthenticated \
+#            --stage-bucket=firebase_code_bucket \
+#            --update-env-vars=GOOGLE_FUNCTION_TARGET=update_conversation
