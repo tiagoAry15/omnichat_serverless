@@ -47,7 +47,7 @@ class FirebaseConnection:
         ref = self.connection.child(path) if path is not None else self.connection
         return ref.get()
 
-    def writeData(self, path: str = None, data=None) -> bool:
+    def writeData(self, path: str = None, data: dict = None) -> bool:
         """Writes data to Firebase at the specified path."""
         if data is None:
             data = {"dummyData": 5}
