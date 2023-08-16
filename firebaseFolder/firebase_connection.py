@@ -63,14 +63,23 @@ class FirebaseConnection:
         ref.set(data)
         return True
 
-    def deleteData(self, path: str = None, data=None) -> bool:
+    def deleteData(self, path: str, data=None) -> bool:
         """Deletes data at the specified path in Firebase."""
-        user_id = self.getUniqueIdByData(path, data)
-        if user_id is None:
-            raise ValueError("User ID cannot be None")
-        ref = self.connection.child(path) if path is not None else self.connection
-        user_ref = ref.child(user_id)
-        user_ref.delete()
+
+        # If only path is provided, we assume it's the direct reference to the data to delete
+        if data is None:
+            ref = self.connection.child(path)
+            ref.delete()
+            return True
+
+        # If data is also provided, we need to find its unique ID first
+        data_id = self.getUniqueIdByData(path, data)
+        if data_id is None:
+            raise ValueError("Cannot find unique ID for provided data")
+
+        ref = self.connection.child(path)
+        data_ref = ref.child(data_id)
+        data_ref.delete()
         return True
 
     def deleteAllData(self) -> bool:
