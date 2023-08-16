@@ -38,18 +38,6 @@ jobs:
 
       - name: Deploy Cloud Functions
         run: |
-          ENV_VARS_LIST="FIREBASE_SDK_AUTH_URI,FIREBASE_SDK_CLIENT_EMAIL,FIREBASE_SDK_CLIENT_ID,FIREBASE_SDK_CLIENT_X509_CERT_URL,FIREBASE_SDK_PRIVATE_KEY,FIREBASE_SDK_PRIVATE_KEY_ID,FIREBASE_SDK_PROJECT_ID,FIREBASE_SDK_TOKEN_URI,FIREBASE_SDK_TYPE"
-          UPDATE_ENV_VARS_ARG=""
-
-          # Construct the --update-env-vars argument
-          IFS=',' read -ra ENV_VARS_ARRAY <<< "$ENV_VARS_LIST"
-          for VAR_NAME in "${ENV_VARS_ARRAY[@]}"; do
-            UPDATE_ENV_VARS_ARG+="$VAR_NAME=${!VAR_NAME},"
-            # Print the variable name and value
-            echo "  \"$VAR_NAME\": \"${!VAR_NAME}\""
-          done
-          UPDATE_ENV_VARS_ARG=${UPDATE_ENV_VARS_ARG%}  # Remove trailing comma
-
           # Deploy get_all_conversations Cloud Function
           gcloud functions deploy get_all_conversations\
             --source=. \
