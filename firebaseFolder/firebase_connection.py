@@ -98,7 +98,7 @@ class FirebaseConnection:
 def __main():
     aux = getFirebaseCredentials()
     fc = FirebaseConnection()
-    # data = fc.readData("users")
+    data = fc.readData("users")
     return
 
 
