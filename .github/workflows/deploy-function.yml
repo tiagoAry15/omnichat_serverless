@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
+      FIREBASE_SDK_TOKEN_URI: ${{ secrets.FIREBASE_SDK_TOKEN_URI }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     steps:
@@ -38,7 +39,6 @@ jobs:
           for VAR_NAME in "${ENV_VARS_ARRAY[@]}"; do
             UPDATE_ENV_VARS_ARG+="$VAR_NAME=${!VAR_NAME},"
             # Print the variable name and value
-            echo "$VAR_NAME:"
             echo "  \"$VAR_NAME\": \"${!VAR_NAME}\""
           done
           UPDATE_ENV_VARS_ARG=${UPDATE_ENV_VARS_ARG%}  # Remove trailing comma
