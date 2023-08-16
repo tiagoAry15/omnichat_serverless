@@ -31,10 +31,9 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
-      - name: Deploy Cloud Functions
+      - name: Deploy get_all_conversations Cloud Function
         run: |
-          # Deploy get_all_conversations Cloud Function
-          gcloud functions deploy get_all_conversations\
+          gcloud functions deploy get_all_conversations \
             --source=. \
             --runtime=python39 \
             --entry-point=get_all_conversations \
@@ -42,9 +41,10 @@ jobs:
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
-          
-                    # Deploy create_dummy_conversations Cloud Function
-          gcloud functions deploy create_dummy_conversations\
+
+      - name: Deploy create_dummy_conversations Cloud Function
+        run: |
+          gcloud functions deploy create_dummy_conversations \
             --source=. \
             --runtime=python39 \
             --entry-point=create_dummy_conversations \
@@ -52,8 +52,9 @@ jobs:
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
-          
-          # Deploy update_conversation Cloud Function
+
+      - name: Deploy update_conversation Cloud Function
+        run: |
           gcloud functions deploy update_conversation \
             --source=. \
             --runtime=python39 \
