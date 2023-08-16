@@ -22,7 +22,6 @@ def getFirebaseCredentials():
         "client_x509_cert_url": os.environ["FIREBASE_SDK_CLIENT_X509_CERT_URL"]
     }
     key = firebase_credentials["private_key"]
-    key = key.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "").strip()
     key = f"-----BEGIN PRIVATE KEY-----\n{key}\n-----END PRIVATE KEY-----"
     firebase_credentials["private_key"] = key
     return credentials.Certificate(firebase_credentials)
@@ -98,7 +97,7 @@ class FirebaseConnection:
 
 def __main():
     aux = getFirebaseCredentials()
-    # fc = FirebaseConnection()
+    fc = FirebaseConnection()
     # data = fc.readData("users")
     return
 
