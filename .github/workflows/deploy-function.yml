@@ -31,6 +31,20 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
+      - name: Set env vars for Cloud Function deployment
+        run: |
+          UPDATE_ENV_VARS_ARG="FIREBASE_SDK_AUTH_URI=${FIREBASE_SDK_AUTH_URI},\
+          FIREBASE_SDK_CLIENT_EMAIL=${FIREBASE_SDK_CLIENT_EMAIL},\
+          FIREBASE_SDK_CLIENT_ID=${FIREBASE_SDK_CLIENT_ID},\
+          FIREBASE_SDK_CLIENT_X509_CERT_URL=${FIREBASE_SDK_CLIENT_X509_CERT_URL},\
+          FIREBASE_SDK_PRIVATE_KEY=${FIREBASE_SDK_PRIVATE_KEY},\
+          FIREBASE_SDK_PRIVATE_KEY_ID=${FIREBASE_SDK_PRIVATE_KEY_ID},\
+          FIREBASE_SDK_PROJECT_ID=${FIREBASE_SDK_PROJECT_ID},\
+          FIREBASE_SDK_TOKEN_URI=${FIREBASE_SDK_TOKEN_URI},\
+          FIREBASE_SDK_TYPE=${FIREBASE_SDK_TYPE},\
+          TEST_SECRET=${TEST_SECRET}"
+          echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
+
       - name: Deploy get_all_conversations Cloud Function
         run: |
           gcloud functions deploy get_all_conversations \
