@@ -10,16 +10,16 @@ def getFirebaseCredentials():
     load_dotenv()
     logging.debug(f"ENVIRONMENT VARIABLES: {list(os.environ)}")
     firebase_credentials = {
-        "type": os.environ["FIREBASE_SDK_TYPE"],
-        "project_id": os.environ["FIREBASE_SDK_PROJECT_ID"],
-        "private_key_id": os.environ["FIREBASE_SDK_PRIVATE_KEY_ID"],
-        "private_key": os.environ["FIREBASE_SDK_PRIVATE_KEY"],
+        "auth_uri": os.environ["FIREBASE_SDK_AUTH_URI"],
         "client_email": os.environ["FIREBASE_SDK_CLIENT_EMAIL"],
         "client_id": os.environ["FIREBASE_SDK_CLIENT_ID"],
-        "auth_uri": os.environ["FIREBASE_SDK_AUTH_URI"],
+        "client_x509_cert_url": os.environ["FIREBASE_SDK_CLIENT_X509_CERT_URL"],
+        "private_key": os.environ["FIREBASE_SDK_PRIVATE_KEY"],
+        "private_key_id": os.environ["FIREBASE_SDK_PRIVATE_KEY_ID"],
+        "project_id": os.environ["FIREBASE_SDK_PROJECT_ID"],
         "token_uri": os.environ["FIREBASE_SDK_TOKEN_URI"],
+        "type": os.environ["FIREBASE_SDK_TYPE"],
         "auth_provider_x509_cert_url": os.environ["FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL"],
-        "client_x509_cert_url": os.environ["FIREBASE_SDK_CLIENT_X509_CERT_URL"]
     }
     key = firebase_credentials["private_key"]
     key = f"-----BEGIN PRIVATE KEY-----\n{key}\n-----END PRIVATE KEY-----"
