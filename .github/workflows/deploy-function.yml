@@ -49,6 +49,7 @@ jobs:
 
       - name: Deploy get_all_conversations Cloud Function
         run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
           gcloud functions deploy get_all_conversations \
             --source=. \
             --runtime=python39 \
@@ -60,6 +61,7 @@ jobs:
 
       - name: Deploy create_dummy_conversations Cloud Function
         run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
           gcloud functions deploy create_dummy_conversations \
             --source=. \
             --runtime=python39 \
@@ -71,6 +73,7 @@ jobs:
 
       - name: Deploy update_conversation Cloud Function
         run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
           gcloud functions deploy update_conversation \
             --source=. \
             --runtime=python39 \
