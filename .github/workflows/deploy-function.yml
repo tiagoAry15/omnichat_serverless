@@ -36,19 +36,27 @@ jobs:
       - name: Set env vars for Cloud Function deployment
         run: |
           PRIVATE_KEY_SANITIZED=$(echo "${FIREBASE_SDK_PRIVATE_KEY}" | sed ':a;N;$!ba;s/\n/\\n/g')
-          UPDATE_ENV_VARS_ARG="FIREBASE_SDK_AUTH_URI=${FIREBASE_SDK_AUTH_URI},\
-          FIREBASE_SDK_CLIENT_EMAIL=${FIREBASE_SDK_CLIENT_EMAIL},\
-          FIREBASE_SDK_CLIENT_ID=${FIREBASE_SDK_CLIENT_ID},\
-          FIREBASE_SDK_CLIENT_X509_CERT_URL=${FIREBASE_SDK_CLIENT_X509_CERT_URL},\
-          FIREBASE_SDK_PRIVATE_KEY=${PRIVATE_KEY_SANITIZED},\
-          FIREBASE_SDK_PRIVATE_KEY_ID=${FIREBASE_SDK_PRIVATE_KEY_ID},\
-          FIREBASE_SDK_PROJECT_ID=${FIREBASE_SDK_PROJECT_ID},\
-          FIREBASE_SDK_TOKEN_URI=${FIREBASE_SDK_TOKEN_URI},\
-          FIREBASE_SDK_TYPE=${FIREBASE_SDK_TYPE},\
-          FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL=${FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL},
-          FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL},\
-          TEST_SECRET=${TEST_SECRET}"
+
+          # Create an array with all the environment variable assignments
+          ENV_VARS_ARRAY=(
+            "FIREBASE_SDK_AUTH_URI=${FIREBASE_SDK_AUTH_URI}"
+            "FIREBASE_SDK_TOKEN_URI=${FIREBASE_SDK_TOKEN_URI}"
+            "FIREBASE_SDK_AUTH_PROVIDER_CERT_URL=${FIREBASE_SDK_AUTH_PROVIDER_CERT_URL}"
+            "FIREBASE_SDK_CLIENT_X509_CERT_URL=${FIREBASE_SDK_CLIENT_X509_CERT_URL}"
+            "FIREBASE_SDK_CLIENT_EMAIL=${FIREBASE_SDK_CLIENT_EMAIL}"
+            "FIREBASE_SDK_CLIENT_ID=${FIREBASE_SDK_CLIENT_ID}"
+            "FIREBASE_SDK_PROJECT_ID=${FIREBASE_SDK_PROJECT_ID}"
+            "FIREBASE_SDK_PRIVATE_KEY_ID=${FIREBASE_SDK_PRIVATE_KEY_ID}"
+            "FIREBASE_SDK_PRIVATE_KEY=$PRIVATE_KEY_SANITIZED"
+          )
+
+          # Join the array elements into a comma-separated string
+          UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
+
+          echo "UPDATE_ENV_VARS_ARG contents:"
+          echo "$UPDATE_ENV_VARS_ARG" # Print the contents for inspection
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
+      
       
 
       - name: Deploy get_all_conversations Cloud Function
