@@ -48,6 +48,8 @@ jobs:
             "FIREBASE_SDK_PROJECT_ID=${FIREBASE_SDK_PROJECT_ID}"
             "FIREBASE_SDK_PRIVATE_KEY_ID=${FIREBASE_SDK_PRIVATE_KEY_ID}"
             "FIREBASE_SDK_PRIVATE_KEY=$PRIVATE_KEY_SANITIZED"
+            "FIREBASE_SDK_TYPE=${FIREBASE_SDK_TYPE}"
+            "FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}"
           )
 
           # Join the array elements into a comma-separated string
