@@ -67,6 +67,7 @@ jobs:
             --runtime=python39 \
             --entry-point=create_dummy_conversations \
             --trigger-http \
+            --memory 128MB \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
@@ -78,6 +79,7 @@ jobs:
             --source=. \
             --runtime=python39 \
             --entry-point=get_all_conversations \
+            --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
@@ -90,6 +92,7 @@ jobs:
             --source=. \
             --runtime=python39 \
             --entry-point=update_conversation \
+            --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
