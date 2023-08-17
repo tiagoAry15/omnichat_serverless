@@ -3,9 +3,16 @@ from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import getDummyConversationDicts
 from utils.mocks import MockRequest
+import psutil
 
 fc = FirebaseConnection()
 fcm = FirebaseConversation(fc)
+
+
+def _log_memory_usage():
+    process = psutil.Process()
+    memory_usage = process.memory_info().rss / (1024 * 1024)  # Memory in MB
+    print(f"Function used approximately {memory_usage:.2f} MB")
 
 
 def create_dummy_conversations(request=None):
@@ -21,6 +28,7 @@ def create_dummy_conversations(request=None):
     for _dict in dictPot:
         for conversation in _dict["dummyPot"]:
             fcm.createConversation(conversation)
+    _log_memory_usage()
     return 200, "Dummy conversations created successfully."
 
 
@@ -29,6 +37,7 @@ def get_all_conversations(request=None):
         return 'Only GET requests are accepted', 405
     conversations = fcm.getAllConversations()
     arrayOfConversations = list(conversations.values()) if conversations is not None else ["None"]
+    _log_memory_usage()
     return createResponseWithAntiCorsHeaders(arrayOfConversations)
 
 
@@ -39,12 +48,13 @@ def update_conversation(request=None):
     whatsappNumber = headers.get("whatsappNumber", None)
     body = headers.get("body", None)
     sender = headers.get("sender", None)
+    _log_memory_usage()
     return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
 
 
 def __main():
-    dummy_request = MockRequest(method="POST")
-    create_dummy_conversations(dummy_request)
+    dummy_request = MockRequest(method="GET")
+    aux = get_all_conversations(dummy_request)
     return
 
 
