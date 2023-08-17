@@ -34,7 +34,8 @@ class FirebaseConnection:
         Firebase realtime database."""
         load_dotenv()
         cred = getFirebaseCredentials()
-        self.app = firebase_admin.initialize_app(cred, {"databaseURL": os.getenv("FIREBASE_DATABASE_URL")})
+        database_url = os.environ["FIREBASE_DATABASE_URL"]
+        self.app = firebase_admin.initialize_app(cred, {"databaseURL": database_url})
         self.connection = db.reference('/', app=self.app)
 
     def changeDatabaseConnection(self, path: str) -> db.reference:
