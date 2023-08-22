@@ -1,7 +1,7 @@
+import html
 import json
-
 import requests
-
+import xml.etree.ElementTree as ElementTree
 from requestTests.requisitionBoilerPlate import getTwilioBoilerPlate, getDialogflowBoilerPlate
 
 
@@ -32,9 +32,16 @@ def sendDialogflowRequest(url: str = "http://localhost:3000/webhookForIntent", b
     return requests.post(url, headers=headers, data=body_content)
 
 
+def convertResponseToUtf8(response: requests.Response) -> str:
+    responseXmlContent = response.text
+    formatted = html.unescape(responseXmlContent)
+    root = ElementTree.fromstring(formatted)
+    return root.find(".//Body").text
+
+
 def __main():
-    response = sendTwilioRequest()
-    print(response)
+    response = sendTwilioRequest(body="Oii")
+    print(convertResponseToUtf8(response))
 
 
 if __name__ == "__main__":
