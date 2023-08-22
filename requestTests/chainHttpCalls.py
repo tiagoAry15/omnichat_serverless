@@ -16,17 +16,18 @@ def chainedHttpCalls(messageList: List[str], delay: int):
 
 
 def __getSignedInMessageList():
-    return ["Vou querer uma pizza meia calabresa meia mussarela e uma pizza de frango", "sim"]
+    return ["Oii", "Vou querer uma pizza meia calabresa meia margherita e uma pizza de frango", "sim",
+            "vou querer um guaraná e dois sucos de laranja", "pix"]
 
 
 def __getFullPathMessageList():
     return ["Oii", "Clark Kent", "Rua da Paz 2172", "17454565899", "Ok",
-            "Vou querer uma pizza meia calabresa meia mussarela e uma pizza de frango", "sim",
-            "vou querer um guaraná e dois sucos de laranja"]
+            "Vou querer uma pizza meia calabresa meia margherita e uma pizza de frango", "sim",
+            "vou querer um guaraná e dois sucos de laranja", "pix"]
 
 
 def __main():
-    messageList = __getFullPathMessageList()
+    messageList = __getSignedInMessageList()
     results = chainedHttpCalls(messageList, 3500)
     return
 
