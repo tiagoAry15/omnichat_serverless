@@ -10,6 +10,10 @@ def getFirebaseSDKPath() -> Path:
     return getMainFolderPath() / 'firebaseFolder/firebase_sdk.json'
 
 
+def getTestPlanCsvFolderPath() -> Path:
+    return getMainFolderPath() / 'requestTests/testPlans'
+
+
 def __main():
     sdkFile = getFirebaseSDKPath()
     existingSdkFile = sdkFile.exists()
