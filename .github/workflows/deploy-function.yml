@@ -59,19 +59,6 @@ jobs:
           echo "$UPDATE_ENV_VARS_ARG" # Print the contents for inspection
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
 
-      - name: Deploy create_dummy_conversations Cloud Function
-        run: |
-          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy create_dummy_conversations \
-            --source=. \
-            --runtime=python39 \
-            --entry-point=create_dummy_conversations \
-            --trigger-http \
-            --memory 128MB \
-            --allow-unauthenticated \
-            --stage-bucket=firebase_code_bucket \
-            --update-env-vars=$UPDATE_ENV_VARS_ARG
-
       - name: Deploy get_all_conversations Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
