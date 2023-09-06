@@ -28,9 +28,17 @@ def update_conversation(request=None):
     return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
 
 
+def get_conversation_by_whatsapp_number(request=None):
+    request_json = request.get_json()
+    whatsappNumber = request_json.get("whatsappNumber", None)
+    conversationData = fcm.retrieveAllMessagesByWhatsappNumber(whatsappNumber)
+    return createResponseWithAntiCorsHeaders(conversationData)
+
+
 def __main():
     dummy_request = MockRequest(method="GET")
-    aux = get_all_conversations(dummy_request)
+    # aux = get_all_conversations(dummy_request)
+    aux = get_conversation_by_whatsapp_number("+558599663533")
     return
 
 
