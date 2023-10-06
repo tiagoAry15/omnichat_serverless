@@ -1,11 +1,14 @@
+from deprecated_cloud_functions.old_functions import get_conversation_by_whatsapp_number
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
+from firebaseFolder.firebase_order import FirebaseOrder
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.mocks import MockRequest
 
 fc = FirebaseConnection()
 fcm = FirebaseConversation(fc)
+fo = FirebaseOrder(fc)
 
 
 def get_all_conversations(request=None):
@@ -28,11 +31,29 @@ def update_conversation(request=None):
     return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
 
 
-def get_conversation_by_whatsapp_number(request=None):
-    request_json = request.get_json()
-    whatsappNumber = request_json.get("whatsappNumber", None)
-    conversationData = fcm.retrieveAllMessagesByWhatsappNumber(whatsappNumber)
-    return createResponseWithAntiCorsHeaders(conversationData)
+def create_order(request=None):
+    REQUIRED_HEADERS = ["whatsappNumber", "status", "details"]
+    if request is None or request.method != 'POST':
+        return 'Only POST requests are accepted', 405
+
+    missing_headers = [header for header in REQUIRED_HEADERS if not request.headers.get(header)]
+    if missing_headers:
+        return f"{', '.join(missing_headers)} cannot be empty", 400
+
+    log_memory_usage()
+
+    whatsappNumber = request.headers["whatsappNumber"]
+    status = request.headers["status"]
+    details = request.headers["details"]
+
+    return fo.createOrder(whatsappNumber, status, details)
+
+
+def read_all_orders(request=None):
+    if request is None or request.method != 'GET':
+        return 'Only GET requests are accepted', 405
+    log_memory_usage()
+    return createResponseWithAntiCorsHeaders(fo.readAllOrders())
 
 
 def __main():

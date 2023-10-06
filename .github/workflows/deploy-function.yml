@@ -86,13 +86,26 @@ jobs:
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
 
-      - name: Deploy get_conversation_by_whatsapp_number Cloud Function
+      - name: Deploy create_order Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy get_conversation_by_whatsapp_number \
+          gcloud functions deploy create_order \
             --source=. \
             --runtime=python39 \
             --entry-point=get_conversation_by_whatsapp_number \
+            --memory 128MB \
+            --trigger-http \
+            --allow-unauthenticated \
+            --stage-bucket=firebase_code_bucket \
+            --update-env-vars=$UPDATE_ENV_VARS_ARG
+
+      - name: Deploy read_all_orders Cloud Function
+        run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+          gcloud functions deploy read_all_orders \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=read_all_orders \
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \

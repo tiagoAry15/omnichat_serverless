@@ -27,8 +27,11 @@ class FirebaseOrder(FirebaseWrapper):
         self.firebaseConnection.writeData(data=orderData)
         return True
 
-    def readOrder(self, whatsappNumber: str):
+    def readSingleOrder(self, whatsappNumber: str):
         return self._getLastOrderByWhatsappNumber(whatsappNumber)
+
+    def readAllOrders(self):
+        return self.firebaseConnection.readData()
 
     def updateOrder(self, whatsappNumber: str, **kwargs) -> bool:
         if not whatsappNumber:
@@ -68,8 +71,10 @@ class FirebaseOrder(FirebaseWrapper):
 def __main():
     fc = FirebaseConnection()
     fo = FirebaseOrder(fc)
+    # res = fo.createDummyOrder()
+    all_orders = fo.readAllOrders()
     # res = fo.updateOrder(whatsappNumber="+558597648595", status="finished")
-    res = fo.deleteOrder(whatsappNumber="+558597648595")
+    # res = fo.deleteOrder(whatsappNumber="+558597648595")
     return
 
 

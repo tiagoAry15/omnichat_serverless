@@ -1,6 +1,11 @@
-from main import fcm
+from firebaseFolder.firebase_connection import FirebaseConnection
+from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.cloudFunctionsUtils import log_memory_usage
+from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import getDummyConversationDicts
+
+fc = FirebaseConnection()
+fcm = FirebaseConversation(fc)
 
 
 def create_dummy_conversations(request=None):
@@ -18,3 +23,10 @@ def create_dummy_conversations(request=None):
             fcm.createConversation(conversation)
     log_memory_usage()
     return 200, "Dummy conversations created successfully."
+
+
+def get_conversation_by_whatsapp_number(request=None):
+    request_json = request.get_json()
+    whatsappNumber = request_json.get("whatsappNumber", None)
+    conversationData = fcm.retrieveAllMessagesByWhatsappNumber(whatsappNumber)
+    return createResponseWithAntiCorsHeaders(conversationData)
