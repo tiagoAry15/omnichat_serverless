@@ -110,4 +110,4 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-            --update-env-vars=$UPDATE_ENV_VARS_ARG
+            --set-env-vars TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }},TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }},TWILIO_PHONE_NUMBER=${{ secrets.TWILIO_PHONE_NUMBER }},DIALOGFLOW_TYPE=${{ secrets.DIALOGFLOW_TYPE }},DIALOGFLOW_PROJECT_ID=${{ secrets.DIALOGFLOW_PROJECT_ID }},DIALOGFLOW_PRIVATE_KEY_ID=${{ secrets.DIALOGFLOW_PRIVATE_KEY_ID }},DIALOGFLOW_CLIENT_EMAIL=${{ secrets.DIALOGFLOW_CLIENT_EMAIL }},DIALOGFLOW_CLIENT_ID=${{ secrets.DIALOGFLOW_CLIENT_ID }},DIALOGFLOW_CLIENT_X509_CERT_URL=${{ secrets.DIALOGFLOW_CLIENT_X509_CERT_URL }}
