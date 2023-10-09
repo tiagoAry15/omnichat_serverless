@@ -21,13 +21,25 @@ def get_all_conversations(request=None):
 
 
 def update_conversation(request=None):
+    # Ensure it's a POST request
     if request.method != 'POST':
         return 'Only POST requests are accepted', 405
+
+    body = request.get_json()
     headers = request.headers
-    whatsappNumber = headers.get("whatsappNumber", None)
-    body = headers.get("body", None)
-    sender = headers.get("sender", None)
+
+    # Retrieve sender from headers or body
+    sender = headers.get("sender") or body.get("name")
+    if not sender:
+        return "Sender cannot be empty", 400
+
+    # Ensure WhatsappNumber exists in headers
+    whatsappNumber = headers.get("whatsappNumber")
+    if not whatsappNumber:
+        return "WhatsappNumber cannot be empty", 400
+
     log_memory_usage()
+
     return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
 
 
