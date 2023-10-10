@@ -9,16 +9,16 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      FIREBASE_SDK_AUTH_URI: ${{ secrets.FIREBASE_SDK_AUTH_URI }}
-      FIREBASE_SDK_CLIENT_EMAIL: ${{ secrets.FIREBASE_SDK_CLIENT_EMAIL }}
-      FIREBASE_SDK_CLIENT_ID: ${{ secrets.FIREBASE_SDK_CLIENT_ID }}
-      FIREBASE_SDK_CLIENT_X509_CERT_URL: ${{ secrets.FIREBASE_SDK_CLIENT_X509_CERT_URL }}
-      FIREBASE_SDK_PRIVATE_KEY: ${{ secrets.FIREBASE_SDK_PRIVATE_KEY }}
-      FIREBASE_SDK_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_SDK_PRIVATE_KEY_ID }}
-      FIREBASE_SDK_PROJECT_ID: ${{ secrets.FIREBASE_SDK_PROJECT_ID }}
-      FIREBASE_SDK_TOKEN_URI: ${{ secrets.FIREBASE_SDK_TOKEN_URI }}
-      FIREBASE_SDK_TYPE: ${{ secrets.FIREBASE_SDK_TYPE }}
-      FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL }}
+      SDK_AUTH_URI: ${{ secrets.SDK_AUTH_URI }}
+      SDK_CLIENT_EMAIL: ${{ secrets.SDK_CLIENT_EMAIL }}
+      SDK_CLIENT_ID: ${{ secrets.SDK_CLIENT_ID }}
+      SDK_CLIENT_X509_CERT_URL: ${{ secrets.SDK_CLIENT_X509_CERT_URL }}
+      SDK_PRIVATE_KEY: ${{ secrets.SDK_PRIVATE_KEY }}
+      SDK_PRIVATE_KEY_ID: ${{ secrets.SDK_PRIVATE_KEY_ID }}
+      SDK_PROJECT_ID: ${{ secrets.SDK_PROJECT_ID }}
+      SDK_TOKEN_URI: ${{ secrets.SDK_TOKEN_URI }}
+      SDK_TYPE: ${{ secrets.SDK_TYPE }}
+      SDK_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.SDK_AUTH_PROVIDER_X509_CERT_URL }}
       FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
@@ -35,21 +35,25 @@ jobs:
 
       - name: Set env vars for Cloud Function deployment
         run: |
-          PRIVATE_KEY_SANITIZED=$(echo "${FIREBASE_SDK_PRIVATE_KEY}" | sed ':a;N;$!ba;s/\n/\\n/g')
+          # Sanitize the private key (convert line breaks to \n)
+          PRIVATE_KEY_SANITIZED=$(echo -n "${{ secrets.SDK_PRIVATE_KEY }}" | sed ':a;N;$!ba;s/\n/\\n/g')
+          
+          # Mask the sanitized key so it doesn't show up in logs
+          echo "::add-mask::$PRIVATE_KEY_SANITIZED"
 
           # Create an array with all the environment variable assignments
           ENV_VARS_ARRAY=(
-            "FIREBASE_SDK_AUTH_URI=${FIREBASE_SDK_AUTH_URI}"
-            "FIREBASE_SDK_CLIENT_EMAIL=${FIREBASE_SDK_CLIENT_EMAIL}"
-            "FIREBASE_SDK_CLIENT_ID=${FIREBASE_SDK_CLIENT_ID}"
-            "FIREBASE_SDK_CLIENT_X509_CERT_URL=${FIREBASE_SDK_CLIENT_X509_CERT_URL}"
-            "FIREBASE_SDK_PRIVATE_KEY=$PRIVATE_KEY_SANITIZED"
-            "FIREBASE_SDK_PRIVATE_KEY_ID=${FIREBASE_SDK_PRIVATE_KEY_ID}"
-            "FIREBASE_SDK_PROJECT_ID=${FIREBASE_SDK_PROJECT_ID}"
-            "FIREBASE_SDK_TOKEN_URI=${FIREBASE_SDK_TOKEN_URI}"
-            "FIREBASE_SDK_TYPE=${FIREBASE_SDK_TYPE}"
-            "FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL=${FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL}"
-            "FIREBASE_SDK_AUTH_PROVIDER_CERT_URL=${FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL}"
+            "SDK_AUTH_URI=${SDK_AUTH_URI}"
+            "SDK_CLIENT_EMAIL=${SDK_CLIENT_EMAIL}"
+            "SDK_CLIENT_ID=${SDK_CLIENT_ID}"
+            "SDK_CLIENT_X509_CERT_URL=${SDK_CLIENT_X509_CERT_URL}"
+            "SDK_PRIVATE_KEY=${PRIVATE_KEY_SANITIZED}"
+            "SDK_PRIVATE_KEY_ID=${SDK_PRIVATE_KEY_ID}"
+            "SDK_PROJECT_ID=${SDK_PROJECT_ID}"
+            "SDK_TOKEN_URI=${SDK_TOKEN_URI}"
+            "SDK_TYPE=${SDK_TYPE}"
+            "SDK_AUTH_PROVIDER_X509_CERT_URL=${SDK_AUTH_PROVIDER_X509_CERT_URL}"
+            "AUTH_PROVIDER_CERT_URL=${SDK_AUTH_PROVIDER_X509_CERT_URL}"
             "FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}"
           )
 
@@ -57,6 +61,7 @@ jobs:
           UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
 
           echo "UPDATE_ENV_VARS_ARG contents:"
+          echo "############################"
           echo "$UPDATE_ENV_VARS_ARG" # Print the contents for inspection
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
 
