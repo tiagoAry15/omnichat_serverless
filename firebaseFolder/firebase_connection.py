@@ -1,30 +1,13 @@
 import logging
 import os
+from typing import Any
+
 import firebase_admin
 from dotenv import load_dotenv
 from firebase_admin import credentials, db
+
+from authentication.credentials_loader import getFirebaseCredentials
 from utils.patterns import singleton
-
-
-def getFirebaseCredentials():
-    load_dotenv()
-    logging.debug(f"ENVIRONMENT VARIABLES: {list(os.environ)}")
-    firebase_credentials = {
-        "auth_uri": os.environ["FIREBASE_SDK_AUTH_URI"],
-        "client_email": os.environ["FIREBASE_SDK_CLIENT_EMAIL"],
-        "client_id": os.environ["FIREBASE_SDK_CLIENT_ID"],
-        "client_x509_cert_url": os.environ["FIREBASE_SDK_CLIENT_X509_CERT_URL"],
-        "private_key": os.environ["FIREBASE_SDK_PRIVATE_KEY"],
-        "private_key_id": os.environ["FIREBASE_SDK_PRIVATE_KEY_ID"],
-        "project_id": os.environ["FIREBASE_SDK_PROJECT_ID"],
-        "token_uri": os.environ["FIREBASE_SDK_TOKEN_URI"],
-        "type": os.environ["FIREBASE_SDK_TYPE"],
-        "auth_provider_x509_cert_url": os.environ["FIREBASE_SDK_AUTH_PROVIDER_X509_CERT_URL"],
-    }
-    key = firebase_credentials["private_key"]
-    key = f"-----BEGIN PRIVATE KEY-----\n{key}\n-----END PRIVATE KEY-----"
-    firebase_credentials["private_key"] = key
-    return credentials.Certificate(firebase_credentials)
 
 
 @singleton
@@ -47,12 +30,34 @@ class FirebaseConnection:
         ref = self.connection.child(path) if path is not None else self.connection
         return ref.get()
 
+    def getValue(self, path: str) -> Any:
+        """Get a value from Firebase at the specified path."""
+        return self.readData(path)
+
+    def setValue(self, path: str, value: Any) -> bool:
+        """Set a value in Firebase at the specified path."""
+        self.connection.child(path).set(value)
+        return True
+
     def writeData(self, path: str = None, data: dict = None) -> bool:
         """Writes data to Firebase at the specified path."""
         if data is None:
             data = {"dummyData": 5}
         ref = self.connection.child(path) if path is not None else self.connection
         ref.push(data)
+        return True
+
+    def writeDataWithoutUniqueId(self, path: str = None, data: dict = None) -> bool:
+        """Writes data to Firebase at the specified path."""
+        if data is None:
+            data = {"dummyData": 5}
+
+        # If a path is provided, write data to that path.
+        # If no path is provided, write data to the root.
+        ref = self.connection.child(path) if path else self.connection
+
+        # Use set method instead of push to avoid Firebase's unique ID generation.
+        ref.set(data)
         return True
 
     def overWriteData(self, path: str = None, data=None) -> bool:

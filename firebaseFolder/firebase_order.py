@@ -15,16 +15,36 @@ class FirebaseOrder(FirebaseWrapper):
     def updateConnection(self):
         self.firebaseConnection.changeDatabaseConnection("orders")
 
-    def createOrder(self, whatsappNumber: str, status: str, details: str) -> bool:
-        if not whatsappNumber:
-            raise ValueError("WhatsappNumber cannot be empty when creating an order.")
+    def getNextOrderId(self) -> int:
+        """Get the next available order ID."""
+        # Get the current max order ID from Firebase
+        current_id = self.firebaseConnection.getValue("last_order_id")
+        if not current_id:
+            return 1  # This is the first order
+        return current_id + 1
+
+    def createOrder(self, customerName: str, pizzaName: str, status: str, address: str, platform: str,
+                    communication: str, observation: str = "None") -> bool:
+        if not customerName:
+            raise ValueError("CustomerName cannot be empty when creating an order. CustomerName example: 'João'")
+        if not pizzaName:
+            raise ValueError("PizzaName cannot be empty when creating an order. PizzaName example: 'Calabresa'")
         if not status:
-            raise ValueError("Status cannot be empty when creating an order.")
-        if not details:
-            raise ValueError("Details cannot be empty when creating an order.")
-        orderData = {"whatsappNumber": whatsappNumber, "status": status, "details": details,
-                     "timestamp": generateTimestamp()}
-        self.firebaseConnection.writeData(data=orderData)
+            raise ValueError("Status cannot be empty when creating an order. Status example: 'Em preparação'")
+        if not address:
+            raise ValueError("Address cannot be empty when creating an order. Address example: 'Rua da Paz 1428'")
+        if not platform:
+            raise ValueError("Platform cannot be empty when creating an order. Platform example: 'Instagram'")
+        if not communication:
+            raise ValueError("Communication cannot be empty when creating an order."
+                             " Communication example: joao@example.com'")
+        next_order_id = self.getNextOrderId()
+        self.firebaseConnection.setValue("last_order_id", next_order_id)
+        path = f"orders/{next_order_id}"
+        orderData = {"timestamp": generateTimestamp(), "customerName": customerName, "pizzaName": pizzaName,
+                     "status": status, "address": address, "platform": platform, "communication": communication,
+                     "observation": observation}
+        self.firebaseConnection.writeDataWithoutUniqueId(path=path, data=orderData)
         return True
 
     def readSingleOrder(self, whatsappNumber: str):
@@ -53,7 +73,8 @@ class FirebaseOrder(FirebaseWrapper):
         return True
 
     def createDummyOrder(self) -> bool:
-        self.createOrder(whatsappNumber="+558597648595", status="pending", details="Sem cebola")
+        self.createOrder(customerName="João", pizzaName="Calabresa", status="Em preparação", address="Rua da Paz 1428",
+                         platform="Instagram", communication="joao@example.com", observation="None")
         return True
 
     def _getLatestOrderAndIdByWhatsappNumber(self, whatsappNumber: str) -> Tuple[dict, str] or Tuple[None, None]:
@@ -71,8 +92,8 @@ class FirebaseOrder(FirebaseWrapper):
 def __main():
     fc = FirebaseConnection()
     fo = FirebaseOrder(fc)
-    # res = fo.createDummyOrder()
-    all_orders = fo.readAllOrders()
+    res = fo.createDummyOrder()
+    # all_orders = fo.readAllOrders()
     # res = fo.updateOrder(whatsappNumber="+558597648595", status="finished")
     # res = fo.deleteOrder(whatsappNumber="+558597648595")
     return

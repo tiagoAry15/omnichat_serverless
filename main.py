@@ -49,7 +49,7 @@ def update_conversation(request):
 
 
 def create_order(request=None):
-    REQUIRED_HEADERS = ["whatsappNumber", "status", "details"]
+    REQUIRED_HEADERS = ["customerName", "pizzaName", "status", "address", "platform", "communication"]
     if request is None or request.method != 'POST':
         return 'Only POST requests are accepted', 405
 
@@ -59,11 +59,16 @@ def create_order(request=None):
 
     log_memory_usage()
 
-    whatsappNumber = request.headers["whatsappNumber"]
+    customerName = request.headers["customerName"]
+    pizzaName = request.headers["pizzaName"]
     status = request.headers["status"]
-    details = request.headers["details"]
+    address = request.headers["address"]
+    platform = request.headers["platform"]
+    communication = request.headers["communication"]
+    observation = request.headers.get("observation", None)
 
-    return fo.createOrder(whatsappNumber, status, details)
+    return fo.createOrder(customerName=customerName, pizzaName=pizzaName, status=status, address=address,
+                          platform=platform, communication=communication, observation=observation)
 
 
 def read_all_orders(request=None):
