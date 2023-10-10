@@ -81,6 +81,11 @@ def read_all_orders(request=None):
     return createResponseWithAntiCorsHeaders(fo.readAllOrders())
 
 
+def get_conversation_by_whatsapp_number(whatsappNumber):
+    conversationData = fcm.getConversationByWhatsappNumber(whatsappNumber)
+    return conversationData, 200
+
+
 def __main():
     dummy_request = MockRequest(method="GET")
     # aux = get_all_conversations(dummy_request)
