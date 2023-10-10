@@ -36,7 +36,7 @@ jobs:
       - name: Set env vars for Cloud Function deployment
         run: |
           # Sanitize the private key (convert line breaks to \n)
-          PRIVATE_KEY_SANITIZED=$(echo -n "${{ secrets.SDK_PRIVATE_KEY }}" | sed 's/\n/\\n/g')
+          PRIVATE_KEY_SANITIZED=$(echo -n "${{ secrets.SDK_PRIVATE_KEY }}" | sed ':a;N;$!ba;s/\n/\\n/g')
           
           # Mask the sanitized key so it doesn't show up in logs
           echo "::add-mask::$PRIVATE_KEY_SANITIZED"
