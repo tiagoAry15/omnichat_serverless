@@ -78,7 +78,7 @@ jobs:
           gcloud functions deploy create_order \
             --source=. \
             --runtime=python39 \
-            --entry-point=get_conversation_by_whatsapp_number \
+            --entry-point=create_order \
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \

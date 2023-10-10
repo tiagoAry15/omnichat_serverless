@@ -8,7 +8,6 @@ def getFirebaseCredentials():
     load_dotenv()
     firebase_credentials = getSdkDict()
     key = firebase_credentials["private_key"]
-    key = key.replace("\n", "")
     key = key.replace("-----BEGIN PRIVATE KEY-----", "").replace("-----END PRIVATE KEY-----", "").strip()
     key = f"-----BEGIN PRIVATE KEY-----\n{key}\n-----END PRIVATE KEY-----"
     firebase_credentials["private_key"] = key
