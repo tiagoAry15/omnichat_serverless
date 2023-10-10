@@ -35,8 +35,8 @@ def update_conversation(request=None):
         }
 
         return "", 204, headers
-    if request.method != 'POST':
-        return 'Only POST requests are accepted', 405
+    if request.method != 'PUT':
+        return 'Only PUT requests are accepted', 405
 
     body = request.get_json()
     headers = request.headers
@@ -53,7 +53,9 @@ def update_conversation(request=None):
 
     log_memory_usage()
 
-    return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender),200, {"Access-Control-Allow-Origin": "*"}
+    response = fcm.updateConversation(body)
+    response_code = 200 if response else 500
+    return response, response_code, {"Access-Control-Allow-Origin": "*"}
 
 
 def create_order(request=None):
