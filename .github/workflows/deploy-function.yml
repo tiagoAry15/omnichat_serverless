@@ -64,7 +64,7 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-            --update-env-vars=$UPDATE_ENV_VARS_ARG
+            --update-env-vars=SDK_TYPE=${{ secrets.SDK_TYPE }},SDK_PROJECT_ID=${{ secrets.SDK_PROJECT_ID }},SDK_PRIVATE_KEY_ID=${{ secrets.SDK_PRIVATE_KEY_ID }},SDK_PRIVATE_KEY=${{ secrets.SDK_PRIVATE_KEY }},SDK_CLIENT_EMAIL=${{ secrets.SDK_CLIENT_EMAIL }},SDK_CLIENT_ID=${{ secrets.SDK_CLIENT_ID }},SDK_CLIENT_X509_CERT_URL=${{ secrets.SDK_CLIENT_X509_CERT_URL }},FIREBASE_DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}
 
       - name: Deploy update_conversation Cloud Function
         run: |
