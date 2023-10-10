@@ -21,7 +21,6 @@ def get_all_conversations(request=None):
     return createResponseWithAntiCorsHeaders(arrayOfConversations)
 
 
-
 def update_conversation(request=None):
     # Ensure it's a POST request
     if request.method == "OPTIONS":
@@ -42,11 +41,11 @@ def update_conversation(request=None):
     body = request.get_json()
     log_memory_usage()
 
-    response = 'conversation updated successfully' if fcm.updateConversation(body) else 'error updating conversation, conversation does not exist'
+    response = 'conversation updated successfully' if fcm.updateConversation(
+        body) else 'error updating conversation, conversation does not exist'
     headers = {"Access-Control-Allow-Origin": "*"}
     response_code = 200 if response else 500
-    return (json.dumps({'response': response}), response_code, headers)  # Corrected this line
-
+    return json.dumps({'response': response}), response_code, headers  # Corrected this line
 
 
 def create_order(request=None):
@@ -77,29 +76,6 @@ def read_all_orders(request=None):
         return 'Only GET requests are accepted', 405
     log_memory_usage()
     return createResponseWithAntiCorsHeaders(fo.readAllOrders())
-
-
-def get_conversation_by_whatsapp_number(request=None):
-    if request.method == "OPTIONS":
-        # Allows GET requests from any origin with the Content-Type
-        # header and caches preflight response for an 3600s
-        headers = {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, PUT",
-            "Access-Control-Allow-Headers": "Content-Type",
-            "Access-Control-Max-Age": "3600",
-        }
-
-        return ('', 204, headers)
-
-    if request is None or request.method != 'GET':
-        return 'Only GET requests are accepted', 405
-    whatsappNumber = request.args.get('whatsappNumber')
-    if not whatsappNumber:
-        return 'Whatsapp number cannot be empty', 400
-    headers = {"Access-Control-Allow-Origin": "*"}
-    conversationData = fcm.getConversationByWhatsappNumber(whatsappNumber)
-    return json.dumps(conversationData), 200, headers
 
 
 def __main():
