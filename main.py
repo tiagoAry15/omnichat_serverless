@@ -1,4 +1,5 @@
-from deprecated_cloud_functions.old_functions import get_conversation_by_whatsapp_number
+import json
+
 from firebaseFolder.firebase_connection import FirebaseConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from firebaseFolder.firebase_order import FirebaseOrder
@@ -22,40 +23,29 @@ def get_all_conversations(request=None):
 
 
 @functions_framework.http
-def update_conversation(request=None):
+def update_conversation(request):
     # Ensure it's a POST request
     if request.method == "OPTIONS":
         # Allows GET requests from any origin with the Content-Type
         # header and caches preflight response for an 3600s
         headers = {
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Methods": "GET, PUT",
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Max-Age": "3600",
         }
 
-        return "", 204, headers
+        return json.dumps({"", 204, headers})
     if request.method != 'PUT':
-        return 'Only PUT requests are accepted', 405
+        return json.dumps({'Only PUT requests are accepted', 405})
 
     body = request.get_json()
-    headers = request.headers
-
-    # Retrieve sender from headers or body
-    sender = headers.get("sender") or body.get("name")
-    if not sender:
-        return "Sender cannot be empty", 400
-
-    # Ensure WhatsappNumber exists in headers
-    whatsappNumber = headers.get("whatsappNumber")
-    if not whatsappNumber:
-        return "WhatsappNumber cannot be empty", 400
-
     log_memory_usage()
 
     response = fcm.updateConversation(body)
+    headers = {"Access-Control-Allow-Origin": "*"}
     response_code = 200 if response else 500
-    return response, response_code, {"Access-Control-Allow-Origin": "*"}
+    return json.dumps({response, response_code, headers})
 
 
 def create_order(request=None):
@@ -89,9 +79,25 @@ def get_conversation_by_whatsapp_number(whatsappNumber):
 
 
 def __main():
+    json = {
+        "from": "whatsapp",
+        "isBotActive": True,
+        "lastMessage_timestamp": "18/08/2023 02:34",
+        "messagePot": [
+            {
+                "body": "oi",
+                "id": "b3d9ff41-5219-4dba-9e7a-aa989b695d3f",
+                "sender": "Tiago Ary",
+                "time": "02:34"
+            }
+        ],
+        "name": "Tiago Ary",
+        "phoneNumber": "+558599663533",
+        "status": "active",
+        "unreadMessages": 4
+    }
     dummy_request = MockRequest(method="GET")
-    # aux = get_all_conversations(dummy_request)
-    aux = get_conversation_by_whatsapp_number("+558599663533")
+    fcm.updateConversation(json)
     return
 
 
