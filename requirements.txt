@@ -5,3 +5,5 @@ psutil~=5.9.5
 google-cloud-billing~=1.11.5
 google-cloud-functions~=1.13.3
 google-cloud-monitoring~=2.15.1
+functions-framework~=3.4.0
+```
