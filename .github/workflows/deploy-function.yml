@@ -35,7 +35,7 @@ jobs:
 
       - name: Set env vars for Cloud Function deployment
         run: |# Create an array with all the environment variable assignments
-          PRIVATE_KEY_ENCODED=$(echo -n "${SDK_PRIVATE_KEY}" | base64)
+          PRIVATE_KEY_SANITIZED=$(echo -n "${SDK_PRIVATE_KEY}" | sed 's/\n/\\n/g')
 
           # Create an array with all the environment variable assignments
           ENV_VARS_ARRAY=(
@@ -43,7 +43,7 @@ jobs:
             "SDK_CLIENT_EMAIL=${SDK_CLIENT_EMAIL}"
             "SDK_CLIENT_ID=${SDK_CLIENT_ID}"
             "SDK_CLIENT_X509_CERT_URL=${SDK_CLIENT_X509_CERT_URL}"
-            "SDK_PRIVATE_KEY=abc"
+            "SDK_PRIVATE_KEY=${PRIVATE_KEY_SANITIZED}"
             "SDK_PRIVATE_KEY_ID=${SDK_PRIVATE_KEY_ID}"
             "SDK_PROJECT_ID=${SDK_PROJECT_ID}"
             "SDK_TOKEN_URI=${SDK_TOKEN_URI}"
