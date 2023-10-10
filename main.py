@@ -5,6 +5,7 @@ from firebaseFolder.firebase_order import FirebaseOrder
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.mocks import MockRequest
+import functions_framework
 
 fc = FirebaseConnection()
 fcm = FirebaseConversation(fc)
@@ -20,8 +21,20 @@ def get_all_conversations(request=None):
     return createResponseWithAntiCorsHeaders(arrayOfConversations)
 
 
+@functions_framework.http
 def update_conversation(request=None):
     # Ensure it's a POST request
+    if request.method == "OPTIONS":
+        # Allows GET requests from any origin with the Content-Type
+        # header and caches preflight response for an 3600s
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+        }
+
+        return "", 204, headers
     if request.method != 'POST':
         return 'Only POST requests are accepted', 405
 
@@ -40,7 +53,7 @@ def update_conversation(request=None):
 
     log_memory_usage()
 
-    return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender)
+    return fcm.appendMessageToWhatsappNumber(whatsappNumber, body, sender),200, {"Access-Control-Allow-Origin": "*"}
 
 
 def create_order(request=None):
