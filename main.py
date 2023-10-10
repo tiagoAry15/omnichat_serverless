@@ -33,10 +33,10 @@ def update_conversation(request=None):
             "Access-Control-Max-Age": "3600",
         }
 
-        return ('', 204, headers)  # Corrected this line
+        return '', 204, headers
 
     if request.method != 'PUT':
-        return ('Only PUT requests are accepted', 405)  # Corrected this line
+        return 'Only PUT requests are accepted', 405
 
     body = request.get_json()
     log_memory_usage()
@@ -45,7 +45,7 @@ def update_conversation(request=None):
         body) else 'error updating conversation, conversation does not exist'
     headers = {"Access-Control-Allow-Origin": "*"}
     response_code = 200 if response else 500
-    return json.dumps({'response': response}), response_code, headers  # Corrected this line
+    return json.dumps({'response': response}), response_code, headers
 
 
 def create_order(request=None):
@@ -67,8 +67,11 @@ def create_order(request=None):
     communication = request.headers["communication"]
     observation = request.headers.get("observation", None)
 
-    return fo.createOrder(customerName=customerName, pizzaName=pizzaName, status=status, address=address,
-                          platform=platform, communication=communication, observation=observation)
+    fo.createOrder(customerName=customerName, pizzaName=pizzaName, status=status, address=address,
+                   platform=platform, communication=communication, observation=observation)
+
+    response = 'order created successfully', 200
+    return createResponseWithAntiCorsHeaders(response)
 
 
 def read_all_orders(request=None):

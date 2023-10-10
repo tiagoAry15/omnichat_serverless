@@ -96,4 +96,4 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-            --set-env-vars $UPDATE_ENV_VARS_ARG
+            --update-env-vars $UPDATE_ENV_VARS_ARG
