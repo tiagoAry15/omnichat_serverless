@@ -40,7 +40,7 @@ class FirebaseOrder(FirebaseWrapper):
                              " Communication example: joao@example.com'")
         next_order_id = self.getNextOrderId()
         self.firebaseConnection.setValue("last_order_id", next_order_id)
-        path = f"orders/{next_order_id}"
+        path = f"orders_pool/{next_order_id}"
         orderData = {"timestamp": generateTimestamp(), "customerName": customerName, "pizzaName": pizzaName,
                      "status": status, "address": address, "platform": platform, "communication": communication,
                      "observation": observation}
@@ -53,14 +53,21 @@ class FirebaseOrder(FirebaseWrapper):
     def readAllOrders(self):
         return self.firebaseConnection.readData()
 
-    def updateOrder(self, whatsappNumber: str, **kwargs) -> bool:
-        if not whatsappNumber:
-            raise ValueError("WhatsappNumber cannot be empty when updating an order.")
-        userOrder, userOrderUniqueId = self._getLatestOrderAndIdByWhatsappNumber(whatsappNumber)
+    def getOrderById(self, order_id: int):
+        all_orders = self.readAllOrders()
+        if not all_orders:
+            return None
+        return all_orders["orders_pool"][order_id]
+
+    def updateOrder(self, orderId: int, **kwargs) -> bool:
+        if not orderId:
+            raise ValueError("OrderID cannot be empty when updating an order.")
+        userOrder = self.getOrderById(orderId)
         if not userOrder:
             return False
         userOrder.update(kwargs)
-        self.firebaseConnection.overWriteData(path=userOrderUniqueId, data=userOrder)
+        path = f"orders_pool/{orderId}"
+        self.firebaseConnection.overWriteData(path=path, data=userOrder)
         return True
 
     def deleteOrder(self, whatsappNumber: str):
@@ -92,7 +99,10 @@ class FirebaseOrder(FirebaseWrapper):
 def __main():
     fc = FirebaseConnection()
     fo = FirebaseOrder(fc)
-    res = fo.createDummyOrder()
+    # res = fo.createDummyOrder()
+    # res = fo.readAllOrders()
+    res = fo.updateOrder(orderId=1, observation="Sem cebola")
+    # res = fo.getOrderById(1)
     # all_orders = fo.readAllOrders()
     # res = fo.updateOrder(whatsappNumber="+558597648595", status="finished")
     # res = fo.deleteOrder(whatsappNumber="+558597648595")

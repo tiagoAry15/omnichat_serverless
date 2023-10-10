@@ -45,7 +45,8 @@ def update_conversation(request=None):
         body) else 'error updating conversation, conversation does not exist'
     headers = {"Access-Control-Allow-Origin": "*"}
     response_code = 200 if response else 500
-    return json.dumps({'response': response}), response_code, headers
+    final_response = json.dumps({'response': response}), response_code, headers
+    return createResponseWithAntiCorsHeaders(final_response)
 
 
 def create_order(request=None):
@@ -75,14 +76,29 @@ def create_order(request=None):
 
 
 def read_all_orders(request=None):
-    if request is None or request.method != 'GET':
-        return 'Only GET requests are accepted', 405
+    if request is None or request.method != "GET":
+        return "Only GET requests are accepted", 405
     log_memory_usage()
-    return createResponseWithAntiCorsHeaders(fo.readAllOrders())
+    result = fo.readAllOrders()
+    return createResponseWithAntiCorsHeaders(result)
+
+
+def update_order(request=None):
+    if request is None or request.method != 'PUT':
+        return 'Only PUT requests are accepted', 405
+    if "order_id" not in request.headers:
+        return "'order_id' header cannot be empty", 400
+    order_id = request.headers["order_id"]
+    remaining_headers = [header for header in request.headers if header != "order_id"]
+    result: bool = fo.updateOrder(orderId=order_id, **{header: request.headers[header] for header in remaining_headers})
+    response = "order updated successfully" if result else "error updating order, order does not exist"
+    response_code = 200 if result else 500
+    final_response = json.dumps({'response': response}), response_code
+    return createResponseWithAntiCorsHeaders(final_response)
 
 
 def __main():
-    json = {
+    test_json = {
         "from": "whatsapp",
         "isBotActive": True,
         "lastMessage_timestamp": "18/08/2023 02:34",
@@ -100,7 +116,7 @@ def __main():
         "unreadMessages": 4
     }
     dummy_request = MockRequest(method="GET")
-    print(fcm.updateConversation(json))
+    print(fcm.updateConversation(test_json))
     return
 
 
