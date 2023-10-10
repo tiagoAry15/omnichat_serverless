@@ -6,7 +6,6 @@ from firebaseFolder.firebase_order import FirebaseOrder
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.mocks import MockRequest
-import functions_framework
 
 fc = FirebaseConnection()
 fcm = FirebaseConversation(fc)
@@ -22,8 +21,8 @@ def get_all_conversations(request=None):
     return createResponseWithAntiCorsHeaders(arrayOfConversations)
 
 
-@functions_framework.http
-def update_conversation(request):
+
+def update_conversation(request=None):
     # Ensure it's a POST request
     if request.method == "OPTIONS":
         # Allows GET requests from any origin with the Content-Type
@@ -35,17 +34,19 @@ def update_conversation(request):
             "Access-Control-Max-Age": "3600",
         }
 
-        return json.dumps({"", 204, headers})
+        return ('', 204, headers)  # Corrected this line
+
     if request.method != 'PUT':
-        return json.dumps({'Only PUT requests are accepted', 405})
+        return ('Only PUT requests are accepted', 405)  # Corrected this line
 
     body = request.get_json()
     log_memory_usage()
 
-    response = fcm.updateConversation(body)
+    response = 'conversation updated successfully' if fcm.updateConversation(body) else 'error updating conversation, conversation does not exist'
     headers = {"Access-Control-Allow-Origin": "*"}
     response_code = 200 if response else 500
-    return json.dumps({response, response_code, headers})
+    return (json.dumps({'response': response}), response_code, headers)  # Corrected this line
+
 
 
 def create_order(request=None):
@@ -78,9 +79,27 @@ def read_all_orders(request=None):
     return createResponseWithAntiCorsHeaders(fo.readAllOrders())
 
 
-def get_conversation_by_whatsapp_number(whatsappNumber):
+def get_conversation_by_whatsapp_number(request=None):
+    if request.method == "OPTIONS":
+        # Allows GET requests from any origin with the Content-Type
+        # header and caches preflight response for an 3600s
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, PUT",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+        }
+
+        return ('', 204, headers)
+
+    if request is None or request.method != 'GET':
+        return 'Only GET requests are accepted', 405
+    whatsappNumber = request.args.get('whatsappNumber')
+    if not whatsappNumber:
+        return 'Whatsapp number cannot be empty', 400
+    headers = {"Access-Control-Allow-Origin": "*"}
     conversationData = fcm.getConversationByWhatsappNumber(whatsappNumber)
-    return conversationData, 200
+    return json.dumps(conversationData), 200, headers
 
 
 def __main():
@@ -102,7 +121,7 @@ def __main():
         "unreadMessages": 4
     }
     dummy_request = MockRequest(method="GET")
-    fcm.updateConversation(json)
+    print(fcm.updateConversation(json))
     return
 
 
