@@ -9,16 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      SDK_AUTH_URI: ${{ secrets.SDK_AUTH_URI }}
+      SDK_TYPE: ${{ secrets.SDK_TYPE }}
+      SDK_PROJECT_ID: ${{ secrets.SDK_PROJECT_ID }}
+      SDK_PRIVATE_KEY_ID: ${{ secrets.SDK_PRIVATE_KEY_ID }}
+      SDK_PRIVATE_KEY: ${{ secrets.SDK_PRIVATE_KEY }}
       SDK_CLIENT_EMAIL: ${{ secrets.SDK_CLIENT_EMAIL }}
       SDK_CLIENT_ID: ${{ secrets.SDK_CLIENT_ID }}
       SDK_CLIENT_X509_CERT_URL: ${{ secrets.SDK_CLIENT_X509_CERT_URL }}
-      SDK_PRIVATE_KEY: ${{ secrets.SDK_PRIVATE_KEY }}
-      SDK_PRIVATE_KEY_ID: ${{ secrets.SDK_PRIVATE_KEY_ID }}
-      SDK_PROJECT_ID: ${{ secrets.SDK_PROJECT_ID }}
-      SDK_TOKEN_URI: ${{ secrets.SDK_TOKEN_URI }}
-      SDK_TYPE: ${{ secrets.SDK_TYPE }}
-      SDK_AUTH_PROVIDER_X509_CERT_URL: ${{ secrets.SDK_AUTH_PROVIDER_X509_CERT_URL }}
       FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
@@ -33,35 +30,26 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
-      - name: Set env vars for Cloud Function deployment
-        run: |
-          # Sanitize the private key (convert line breaks to \n)
-          PRIVATE_KEY_SANITIZED=$(echo -n "${{ secrets.SDK_PRIVATE_KEY }}" | sed ':a;N;$!ba;s/\n/\\n/g')
-          
-          # Mask the sanitized key so it doesn't show up in logs
-          echo "::add-mask::$PRIVATE_KEY_SANITIZED"
+      - name: Set env vars for Cloud Run deployment
+        run: |# Create an array with all the environment variable assignments
 
-          # Create an array with all the environment variable assignments
+          PRIVATE_KEY_SANITIZED=$(echo -n "${SDK_PRIVATE_KEY}" | sed 's/\n/\\n/g')
+
           ENV_VARS_ARRAY=(
-            "SDK_AUTH_URI=${SDK_AUTH_URI}"
+            "SDK_TYPE=${SDK_TYPE}"
+            "SDK_PROJECT_ID=${SDK_PROJECT_ID}"
+            "SDK_PRIVATE_KEY=${SDK_PRIVATE_KEY}"
+            "SDK_PRIVATE_KEY_ID=${SDK_PRIVATE_KEY_ID}"
             "SDK_CLIENT_EMAIL=${SDK_CLIENT_EMAIL}"
             "SDK_CLIENT_ID=${SDK_CLIENT_ID}"
             "SDK_CLIENT_X509_CERT_URL=${SDK_CLIENT_X509_CERT_URL}"
-            "SDK_PRIVATE_KEY=${PRIVATE_KEY_SANITIZED}"
-            "SDK_PRIVATE_KEY_ID=${SDK_PRIVATE_KEY_ID}"
-            "SDK_PROJECT_ID=${SDK_PROJECT_ID}"
-            "SDK_TOKEN_URI=${SDK_TOKEN_URI}"
-            "SDK_TYPE=${SDK_TYPE}"
-            "SDK_AUTH_PROVIDER_X509_CERT_URL=${SDK_AUTH_PROVIDER_X509_CERT_URL}"
-            "AUTH_PROVIDER_CERT_URL=${SDK_AUTH_PROVIDER_X509_CERT_URL}"
             "FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}"
           )
 
-          # Join the array elements into a comma-separated string
+           # Join the array elements into a comma-separated string
           UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
 
           echo "UPDATE_ENV_VARS_ARG contents:"
-          echo "############################"
           echo "$UPDATE_ENV_VARS_ARG" # Print the contents for inspection
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
 
