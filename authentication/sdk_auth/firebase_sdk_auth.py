@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from firebase_admin import credentials, initialize_app, App
 
-from authentication.sdk_dict import getSdkDict
+from authentication.sdk_auth.sdk_dict import getSdkDict
 
 load_dotenv()
 

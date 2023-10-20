@@ -1,11 +1,11 @@
 import json
 
-from firebaseFolder.firebase_sdk_connection import FirebaseSDKConnection
+from authentication.sdk_auth.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from firebaseFolder.firebase_order import FirebaseOrder
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
-from utils.mocks import MockRequest, get_all_conversations_mock
+from utils.mocks import get_all_conversations_mock
 
 fc = FirebaseSDKConnection()
 fcm = FirebaseConversation(fc)

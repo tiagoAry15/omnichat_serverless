@@ -1,6 +1,6 @@
 from typing import Any
 from firebase_admin import db
-from authentication.firebase_sdk_auth import get_firebase_app
+from authentication.sdk_auth.firebase_sdk_auth import get_firebase_app
 from utils.patterns import singleton
 
 

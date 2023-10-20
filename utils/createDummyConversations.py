@@ -1,9 +1,5 @@
 import datetime
 import random
-from typing import Tuple
-
-from firebaseFolder.firebase_sdk_connection import FirebaseSDKConnection
-from firebaseFolder.firebase_conversation import FirebaseConversation
 
 
 def getDummyConversationDicts(username: str = "John", phoneNumber: str = "+558599171902", _from: str = "whatsapp"):

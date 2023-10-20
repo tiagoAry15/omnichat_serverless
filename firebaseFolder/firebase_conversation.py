@@ -1,10 +1,8 @@
 import datetime
-import random
 import uuid
-from enum import Enum
 from typing import List
 
-from firebaseFolder.firebase_sdk_connection import FirebaseSDKConnection
+from authentication.sdk_auth.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 
 from utils.patterns import singleton

@@ -14,7 +14,7 @@ def fix_private_key(key: str) -> str:
 
 
 def get_json_key() -> str:
-    json_file = "../costs/pizza_do_bill.json"
+    json_file = "../../costs/pizza_do_bill.json"
     with open(json_file, 'r') as file:
         data = json.load(file)
     return data["private_key"]
