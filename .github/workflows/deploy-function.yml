@@ -18,6 +18,8 @@ jobs:
       SDK_CLIENT_X509_CERT_URL: ${{ secrets.SDK_CLIENT_X509_CERT_URL }}
       FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
       FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+      INSTAGRAM_EMAIL: ${{ secrets.INSTAGRAM_EMAIL }}
+      INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     steps:
@@ -43,6 +45,7 @@ jobs:
             "SDK_CLIENT_X509_CERT_URL=${SDK_CLIENT_X509_CERT_URL}"
             "FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}"
             "FIREBASE_API_KEY=${FIREBASE_API_KEY}"
+            "INSTAGRAM_EMAIL=${INSTAGRAM_EMAIL}"
           )
 
            # Join the array elements into a comma-separated string
