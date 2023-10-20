@@ -5,7 +5,7 @@ from firebaseFolder.firebase_conversation import FirebaseConversation
 from firebaseFolder.firebase_order import FirebaseOrder
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
-from utils.mocks import MockRequest
+from utils.mocks import MockRequest, get_all_conversations_mock
 
 fc = FirebaseConnection()
 fcm = FirebaseConversation(fc)
@@ -98,25 +98,8 @@ def update_order(request=None):
 
 
 def __main():
-    test_json = {
-        "from": "whatsapp",
-        "isBotActive": True,
-        "lastMessage_timestamp": "18/08/2023 02:34",
-        "messagePot": [
-            {
-                "body": "oi",
-                "id": "b3d9ff41-5219-4dba-9e7a-aa989b695d3f",
-                "sender": "Tiago Ary",
-                "time": "02:34"
-            }
-        ],
-        "name": "Tiago Ary",
-        "phoneNumber": "+558599663533",
-        "status": "active",
-        "unreadMessages": 4
-    }
-    dummy_request = MockRequest(method="GET")
-    print(fcm.updateConversation(test_json))
+    response = get_all_conversations(get_all_conversations_mock())
+    response_json = json.loads(response[0])
     return
 
 

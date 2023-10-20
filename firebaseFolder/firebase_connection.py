@@ -1,12 +1,8 @@
-import logging
-import os
 from typing import Any
 
-import firebase_admin
-from dotenv import load_dotenv
-from firebase_admin import credentials, db
+from firebase_admin import db
 
-from authentication.credentials_loader import getFirebaseCredentials
+from authentication.credentials_loader import get_firebase_app
 from utils.patterns import singleton
 
 
@@ -15,10 +11,7 @@ class FirebaseConnection:
     def __init__(self):
         """ FirebaseConnection is a singleton class that provides mechanisms for interacting with
         Firebase realtime database."""
-        load_dotenv()
-        cred = getFirebaseCredentials()
-        database_url = os.environ["FIREBASE_DATABASE_URL"]
-        self.app = firebase_admin.initialize_app(cred, {"databaseURL": database_url})
+        self.app = get_firebase_app()
         self.connection = db.reference('/', app=self.app)
 
     def changeDatabaseConnection(self, path: str) -> db.reference:
@@ -102,7 +95,6 @@ class FirebaseConnection:
 
 
 def __main():
-    aux = getFirebaseCredentials()
     fc = FirebaseConnection()
     data = fc.readData("users")
     return
