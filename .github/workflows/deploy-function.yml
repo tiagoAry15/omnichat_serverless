@@ -46,6 +46,7 @@ jobs:
             "FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}"
             "FIREBASE_API_KEY=${FIREBASE_API_KEY}"
             "INSTAGRAM_EMAIL=${INSTAGRAM_EMAIL}"
+            "INSTAGRAM_PASSWORD=${INSTAGRAM_PASSWORD}"
           )
 
            # Join the array elements into a comma-separated string
