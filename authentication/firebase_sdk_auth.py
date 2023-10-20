@@ -1,7 +1,7 @@
 import os
 
 from dotenv import load_dotenv
-from firebase_admin import credentials, initialize_app
+from firebase_admin import credentials, initialize_app, App
 
 from authentication.sdk_dict import getSdkDict
 
@@ -21,14 +21,14 @@ def __get_database_url() -> str:
     return os.environ["FIREBASE_DATABASE_URL"]
 
 
-def get_firebase_app():
+def get_firebase_app() -> App:
     certificate = __getFirebaseCredentials()
     database_url = __get_database_url()
     return initialize_app(certificate, {"databaseURL": database_url})
 
 
 def __main():
-    aux = __getFirebaseCredentials()
+    app = get_firebase_app()
     return
 
 

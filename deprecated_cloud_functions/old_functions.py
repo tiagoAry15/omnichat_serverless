@@ -1,10 +1,10 @@
-from firebaseFolder.firebase_connection import FirebaseConnection
+from firebaseFolder.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.createDummyConversations import getDummyConversationDicts
 
-fc = FirebaseConnection()
+fc = FirebaseSDKConnection()
 fcm = FirebaseConversation(fc)
 
 

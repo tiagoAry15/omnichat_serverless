@@ -1,11 +1,11 @@
-from firebaseFolder.firebase_connection import FirebaseConnection
+from firebaseFolder.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 from utils.patterns import singleton
 
 
 @singleton
 class FirebaseUser(FirebaseWrapper):
-    def __init__(self, inputFirebaseConnection: FirebaseConnection):
+    def __init__(self, inputFirebaseConnection: FirebaseSDKConnection):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
 
@@ -54,7 +54,7 @@ class FirebaseUser(FirebaseWrapper):
 
 
 def __createDummyUsers():
-    fc = FirebaseConnection()
+    fc = FirebaseSDKConnection()
     fu = FirebaseUser(fc)
     dummyPot = [{"phoneNumber": "+558597648593", "name": "Pedro"},
                 {"phoneNumber": "+558576481232", "name": "Ana Oliveira"},

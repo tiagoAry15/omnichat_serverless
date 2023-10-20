@@ -1,13 +1,11 @@
 from typing import Any
-
 from firebase_admin import db
-
 from authentication.firebase_sdk_auth import get_firebase_app
 from utils.patterns import singleton
 
 
 @singleton
-class FirebaseConnection:
+class FirebaseSDKConnection:
     def __init__(self):
         """ FirebaseConnection is a singleton class that provides mechanisms for interacting with
         Firebase realtime database."""
@@ -95,7 +93,7 @@ class FirebaseConnection:
 
 
 def __main():
-    fc = FirebaseConnection()
+    fc = FirebaseSDKConnection()
     data = fc.readData("users")
     return
 

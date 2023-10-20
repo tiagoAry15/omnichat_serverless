@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from firebaseFolder.firebase_connection import FirebaseConnection
+from firebaseFolder.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 from utils.patterns import singleton
 from utils.time_utils import generateTimestamp, getLatestTimestamp
@@ -8,9 +8,9 @@ from utils.time_utils import generateTimestamp, getLatestTimestamp
 
 @singleton
 class FirebaseOrder(FirebaseWrapper):
-    def __init__(self, inputFirebaseConnection: FirebaseConnection):
+    def __init__(self, inputFirebaseConnection: FirebaseSDKConnection):
         super().__init__()
-        self.firebaseConnection: FirebaseConnection = inputFirebaseConnection
+        self.firebaseConnection: FirebaseSDKConnection = inputFirebaseConnection
 
     def updateConnection(self):
         self.firebaseConnection.changeDatabaseConnection("orders")
@@ -97,7 +97,7 @@ class FirebaseOrder(FirebaseWrapper):
 
 
 def __main():
-    fc = FirebaseConnection()
+    fc = FirebaseSDKConnection()
     fo = FirebaseOrder(fc)
     # res = fo.createDummyOrder()
     # res = fo.readAllOrders()

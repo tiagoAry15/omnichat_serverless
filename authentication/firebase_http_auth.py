@@ -26,10 +26,7 @@ def get_id_token() -> str:
 
 
 def get_data_from_firebase(id_token: str):
-    headers = {
-        "Authorization": f"Bearer {id_token}"
-    }
-    response = requests.get(f"{FIREBASE_DATABASE_URL}/conversations/", headers=headers)
+    response = requests.get(f"{FIREBASE_DATABASE_URL}/orders.json?auth={id_token}")
     return response.json()
 
 
