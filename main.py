@@ -8,7 +8,7 @@ from utils.corsBlocker import createResponseWithAntiCorsHeaders
 from utils.mocks import get_all_conversations_mock
 
 factory = FirebaseConnectionFactory()
-fc = factory.create_connection("SDK")
+fc = factory.create_connection("HTTP")
 fcm = FirebaseConversation(fc)
 fo = FirebaseOrder(fc)
 

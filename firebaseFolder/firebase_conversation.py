@@ -2,7 +2,8 @@ import datetime
 import uuid
 from typing import List
 
-from authentication.sdk_auth.firebase_sdk_connection import FirebaseSDKConnection
+from authentication.abstraction.abstract_connection import AbstractFirebaseConnection
+from authentication.auth_factory import FirebaseConnectionFactory
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 
 from utils.patterns import singleton
@@ -10,11 +11,11 @@ from utils.patterns import singleton
 
 @singleton
 class FirebaseConversation(FirebaseWrapper):
-    def __init__(self, inputFirebaseConnection: FirebaseSDKConnection):
+    def __init__(self, inputFirebaseConnection: AbstractFirebaseConnection):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
 
-    def setConnectionInstance(self, inputFirebaseConnection: FirebaseSDKConnection):
+    def setConnectionInstance(self, inputFirebaseConnection: AbstractFirebaseConnection):
         self.firebaseConnection = inputFirebaseConnection
 
     def updateConnection(self):
@@ -130,7 +131,8 @@ def checkNewUser(whatsappNumber: str, numberPot: List[str],
 
 def __main():
     # __createDummyConversations()
-    fc = FirebaseSDKConnection()
+    factory = FirebaseConnectionFactory()
+    fc = factory.create_connection("SDK")
     fcm = FirebaseConversation(fc)
     randomUniqueId = str(uuid.uuid4())
     currentTime = datetime.datetime.now().strftime("%H:%M")
