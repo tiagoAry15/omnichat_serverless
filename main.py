@@ -51,7 +51,11 @@ def update_conversation(request=None):
     return createResponseWithAntiCorsHeaders(final_response)
 
 
-def update_multiple_conversations(userMessage: str, botAnswer: str, metaData: dict):
+def update_multiple_conversations(request=None):
+    headers = request.headers
+    userMessage = headers["userMessage"]
+    botAnswer = headers["botAnswer"]
+    metaData = json.loads(headers["metaData"])
     phoneNumber = metaData["phoneNumber"]
     userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%H:%M'), **metaData}
     botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'), **metaData, "sender": "Bot"}
