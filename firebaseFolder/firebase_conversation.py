@@ -5,6 +5,7 @@ from typing import List
 from authentication.abstraction.abstract_connection import AbstractFirebaseConnection
 from authentication.auth_factory import FirebaseConnectionFactory
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
+from utils.firebase_utils import organizeSingleMessageData
 
 from utils.patterns import singleton
 
@@ -23,6 +24,16 @@ class FirebaseConversation(FirebaseWrapper):
 
     def getAllConversations(self):
         return self.firebaseConnection.readData()
+
+    def writeToFirebase(self, uniqueId, conversationData) -> bool:
+        try:
+            if uniqueId:
+                self.firebaseConnection.overWriteData(path=uniqueId, data=conversationData)
+            else:
+                self.createConversation(conversationData)
+            return True
+        except Exception as e:
+            return False
 
     def getUniqueIdByWhatsappNumber(self, whatsappNumber: str) -> str or None:
         # sourcery skip: use-next
@@ -54,6 +65,12 @@ class FirebaseConversation(FirebaseWrapper):
         conversationData["messagePot"].append(messageData)
         self.firebaseConnection.overWriteData(path=conversationUniqueId, data=conversationData)
         return 200, "Conversation updated successfully."
+
+    def appendMultipleMessagesToWhatsappNumber(self, messagesData: List[dict], whatsappNumber: str) -> bool:
+        all_conversations = self.getAllConversations()
+        uniqueId, conversationData = organizeSingleMessageData(messagesData[0], whatsappNumber, all_conversations)
+        conversationData["messagePot"] = conversationData["messagePot"] + messagesData[1:]
+        return self.writeToFirebase(uniqueId, conversationData)
 
     def retrieveAllMessagesByWhatsappNumber(self, whatsappNumber: str) -> List[dict] or None:
         uniqueId = self.getUniqueIdByWhatsappNumber(whatsappNumber)

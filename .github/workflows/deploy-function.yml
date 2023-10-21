@@ -67,13 +67,13 @@ jobs:
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
 
-      - name: Deploy update_conversation Cloud Function
+      - name: Deploy update_multiple_conversations Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy update_conversation \
+          gcloud functions deploy update_multiple_conversations \
             --source=. \
             --runtime=python39 \
-            --entry-point=update_conversation \
+            --entry-point=update_multiple_conversations \
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \

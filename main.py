@@ -1,3 +1,4 @@
+import datetime
 import json
 
 from authentication.auth_factory import FirebaseConnectionFactory
@@ -26,7 +27,7 @@ def update_conversation(request=None):
     # Ensure it's a POST request
     if request.method == "OPTIONS":
         # Allows GET requests from any origin with the Content-Type
-        # header and caches preflight response for an 3600s
+        # header and caches preflight response for a 3600s
         headers = {
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, PUT",
@@ -47,6 +48,17 @@ def update_conversation(request=None):
     headers = {"Access-Control-Allow-Origin": "*"}
     response_code = 200 if response else 500
     final_response = json.dumps({'response': response}), response_code, headers
+    return createResponseWithAntiCorsHeaders(final_response)
+
+
+def update_multiple_conversations(userMessage: str, botAnswer: str, metaData: dict):
+    phoneNumber = metaData["phoneNumber"]
+    userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%H:%M'), **metaData}
+    botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'), **metaData, "sender": "Bot"}
+    messagePot = [userMessageDict, botMessageDict]
+    result = fcm.appendMultipleMessagesToWhatsappNumber(messagesData=messagePot, whatsappNumber=phoneNumber)
+    response_code = 200 if result is True else 500
+    final_response = json.dumps({'response': 'messages appended successfully'}), response_code
     return createResponseWithAntiCorsHeaders(final_response)
 
 
