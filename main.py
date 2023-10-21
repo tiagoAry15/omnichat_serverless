@@ -75,6 +75,9 @@ def update_multiple_conversations(request=None):
     except Exception as e:
         return createResponseWithAntiCorsHeaders((json.dumps({'error': f"An error occurred: {str(e)}"}), 500))
 
+def disable_firebase(request=None):
+    pass
+
 
 def create_order(request=None):
     REQUIRED_HEADERS = ["customerName", "pizzaName", "status", "address", "platform", "communication"]

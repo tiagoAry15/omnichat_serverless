@@ -5,6 +5,7 @@ from googleapiclient.errors import HttpError
 import base64
 import json
 
+from utils.firebase_utils import convert_string_to_dict
 
 app = Flask(__name__)
 
@@ -17,8 +18,11 @@ def budget_alert_endpoint():
     print(f"Headers: {headers}")
     encoded_data = request_json["message"]["data"]
     decoded_data = base64.b64decode(encoded_data).decode('utf-8')
-    print(f"Decoded data: {decoded_data}")
-    return f"Data received!", 200
+    decoded_dict = convert_string_to_dict(decoded_data)
+    print(f"Decoded data: {decoded_dict}")
+    percentage_achieved = f"{decoded_dict['alertThresholdExceeded']*100}%"
+    moneySpent = decoded_dict["costAmount"]
+    return f"Percentage achieved: {percentage_achieved}, money spent: {moneySpent}", 200
 
 
 def __main():

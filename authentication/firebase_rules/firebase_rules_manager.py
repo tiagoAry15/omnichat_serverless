@@ -5,7 +5,7 @@ from google.oauth2.service_account import Credentials
 
 from authentication.sdk_auth.private_key_issue_solver import fix_private_key
 from authentication.sdk_auth.sdk_dict import getSdkDict
-from utils.firebase_utils import convert_firebase_rule_to_dict
+from utils.firebase_utils import convert_string_to_dict
 
 
 def get_service_account_access_token() -> str:
@@ -38,7 +38,7 @@ def fetch_firebase_rules(access_token: str, database_url: str):
     curl 'https://docs-examples.firebaseio.com/.settings/rules.json?access_token=<ACCESS_TOKEN>'"""
     url = f'{database_url}/.settings/rules.json?access_token={access_token}'
     response = requests.get(url)
-    return convert_firebase_rule_to_dict(response.text)
+    return convert_string_to_dict(response.text)
 
 
 def update_firebase_rules(access_token: str, new_rule: dict, database_url: str):

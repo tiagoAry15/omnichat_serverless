@@ -42,7 +42,7 @@ def searchUniqueIdAmongConversations(conversationData: dict, userWhatsappNumber:
     return None
 
 
-def convert_firebase_rule_to_dict(rules_str: str) -> dict:
+def convert_string_to_dict(rules_str: str) -> dict:
     # Remove trailing commas
     cleaned_str = re.sub(r',\s*}', '}', rules_str)
     cleaned_str = re.sub(r',\s*\]', ']', cleaned_str)

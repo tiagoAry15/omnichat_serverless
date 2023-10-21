@@ -24,7 +24,6 @@ def getRequisitionMockup(url: str = 'https://5463-168-232-84-75.ngrok-free.app/b
     headers = {
         'Content-Type': 'application/json'
     }
-
     return requests.post(url, data=json.dumps(body), headers=headers)
 
 
