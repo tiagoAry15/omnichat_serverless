@@ -33,7 +33,7 @@ def get_service_account_access_token() -> str:
     return creds.token
 
 
-def fetch_firebase_rules(access_token: str, database_url='https://pizzadobill-rpin-default-rtdb.firebaseio.com'):
+def fetch_firebase_rules(access_token: str, database_url: str):
     """This function is a wrap-up python for the following command-line
     curl 'https://docs-examples.firebaseio.com/.settings/rules.json?access_token=<ACCESS_TOKEN>'"""
     url = f'{database_url}/.settings/rules.json?access_token={access_token}'
@@ -41,10 +41,10 @@ def fetch_firebase_rules(access_token: str, database_url='https://pizzadobill-rp
     return convert_firebase_rule_to_dict(response.text)
 
 
-def update_firebase_rules(access_token: str, new_rule: dict):
+def update_firebase_rules(access_token: str, new_rule: dict, database_url: str):
     """This function is a wrap-up python for the following command-line
     curl -X PUT -d '{ "rules": { ".read": false } }' 'https://docs-examples.firebaseio.com/.settings/rules.json?access_token=<ACCESS_TOKEN>'"""
-    url = f'https://pizzadobill-rpin-default-rtdb.firebaseio.com/.settings/rules.json?access_token={access_token}'
+    url = f'{database_url}.settings/rules.json?access_token={access_token}'
     response = requests.put(url, json=new_rule)
     return response.text
 
