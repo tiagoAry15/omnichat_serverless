@@ -3,6 +3,7 @@ import requests
 from dotenv import load_dotenv
 from authentication.abstraction.abstract_connection import AbstractFirebaseConnection
 from authentication.http_auth.firebase_http_auth import get_id_token
+from authentication.sdk_auth.firebase_sdk_auth import get_firebase_app, get_service_account_token
 
 
 class FirebaseHTTPConnection(AbstractFirebaseConnection):
@@ -90,11 +91,28 @@ class FirebaseHTTPConnection(AbstractFirebaseConnection):
         response.raise_for_status()
         return response.json()['name']  # Firebase returns the unique key as 'name'
 
+    def getDatabaseRules(self) -> dict:
+        """Retrieve Firebase Realtime Database Security Rules."""
+        url = f"{self.database_url}/.settings/rules.json?auth={self.id_token}"
+        response = requests.get(url)
+        response.raise_for_status()  # Raises HTTPError for bad responses (4xx and 5xx)
+        return response.json()
+
+    def setDatabaseRules(self, rules: dict) -> bool:
+        """Update Firebase Realtime Database Security Rules."""
+        url = f"{self.database_url}/.settings/rules.json?auth={self.id_token}"
+        response = requests.put(url, json=rules)
+        response.raise_for_status()  # Raises HTTPError for bad responses (4xx and 5xx)
+        return True
+
 
 def main():
     fc = FirebaseHTTPConnection()
     data = fc.readData("users")
     print(data)
+    rules = fc.getDatabaseRules()
+    print(rules)
+    return
 
 
 if __name__ == '__main__':

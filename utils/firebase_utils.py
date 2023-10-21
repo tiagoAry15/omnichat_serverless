@@ -1,4 +1,6 @@
 import datetime
+import json
+import re
 import uuid
 
 
@@ -38,3 +40,11 @@ def searchUniqueIdAmongConversations(conversationData: dict, userWhatsappNumber:
         if 'phoneNumber' in conversation and conversation['phoneNumber'] == userWhatsappNumber:
             return uniqueId
     return None
+
+
+def convert_firebase_rule_to_dict(rules_str: str) -> dict:
+    # Remove trailing commas
+    cleaned_str = re.sub(r',\s*}', '}', rules_str)
+    cleaned_str = re.sub(r',\s*\]', ']', cleaned_str)
+
+    return json.loads(cleaned_str)

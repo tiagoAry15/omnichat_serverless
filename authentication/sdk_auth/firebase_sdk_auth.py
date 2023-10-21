@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from firebase_admin import credentials, initialize_app, App
 
+from authentication.firebase_rules.firebase_rules_manager import get_service_account_access_token, fetch_firebase_rules
 from authentication.sdk_auth.sdk_dict import getSdkDict
 
 load_dotenv()
@@ -28,7 +29,6 @@ def get_firebase_app() -> App:
 
 
 def __main():
-    app = get_firebase_app()
     return
 
 
