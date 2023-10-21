@@ -3,6 +3,8 @@ import json
 
 from authentication.auth_factory import FirebaseConnectionFactory
 from authentication.firebase_rules.firebase_toggler import FirebaseToggler
+from costs.alerts.handle_alerts import _decode_dict_from_google_cloud_request, \
+    _extract_meaningful_info_from_decoded_dict, _send_cloud_warning_email
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from firebaseFolder.firebase_order import FirebaseOrder
 from utils.cloudFunctionsUtils import log_memory_usage
@@ -75,8 +77,14 @@ def update_multiple_conversations(request=None):
     except Exception as e:
         return createResponseWithAntiCorsHeaders((json.dumps({'error': f"An error occurred: {str(e)}"}), 500))
 
-def disable_firebase(request=None):
-    pass
+
+def budget_alert_endpoint(request=None):
+    request_content = request.json
+    decoded_dict = _decode_dict_from_google_cloud_request(request_content)
+    moneySpent, costIntervalTime, percentage_achieved = _extract_meaningful_info_from_decoded_dict(decoded_dict)
+    final_string = _send_cloud_warning_email(costIntervalTime, moneySpent, percentage_achieved)
+    ft.disable_firebase()
+    return final_string, 200
 
 
 def create_order(request=None):

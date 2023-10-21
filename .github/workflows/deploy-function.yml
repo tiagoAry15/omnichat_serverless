@@ -20,6 +20,8 @@ jobs:
       FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
       INSTAGRAM_EMAIL: ${{ secrets.INSTAGRAM_EMAIL }}
       INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+      SEND_GMAIL_USERNAME: ${{ secrets.SEND_GMAIL_USERNAME }}
+      SEND_GMAIL_APP_PASSWORD: ${{ secrets.SEND_GMAIL_APP_PASSWORD }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
 
     steps:
@@ -47,6 +49,8 @@ jobs:
             "FIREBASE_API_KEY=${FIREBASE_API_KEY}"
             "INSTAGRAM_EMAIL=${INSTAGRAM_EMAIL}"
             "INSTAGRAM_PASSWORD=${INSTAGRAM_PASSWORD}"
+            "SEND_GMAIL_USERNAME=${SEND_GMAIL_USERNAME}"
+            "SEND_GMAIL_APP_PASSWORD=${SEND_GMAIL_APP_PASSWORD}"
           )
 
            # Join the array elements into a comma-separated string

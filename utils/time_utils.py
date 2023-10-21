@@ -14,6 +14,15 @@ def getLatestTimestamp(timestampList: List[str]):
     return max(convertedTimestamps)
 
 
+def convert_timestamp(input_str: str):
+    # Parse the input string into a datetime object
+    dt = datetime.strptime(input_str, '%Y-%m-%dT%H:%M:%SZ')
+
+    # Format the datetime object into the desired string format
+    formatted_str = dt.strftime('%H:%M at %d-%b-%Y')
+    return formatted_str
+
+
 def __main():
     res = generateTimestamp()
     return
