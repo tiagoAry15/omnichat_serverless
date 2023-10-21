@@ -52,18 +52,26 @@ def update_conversation(request=None):
 
 
 def update_multiple_conversations(request=None):
-    headers = request.headers
-    userMessage = headers["userMessage"]
-    botAnswer = headers["botAnswer"]
-    metaData = json.loads(headers["metaData"])
-    phoneNumber = metaData["phoneNumber"]
-    userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%H:%M'), **metaData}
-    botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'), **metaData, "sender": "Bot"}
-    messagePot = [userMessageDict, botMessageDict]
-    result = fcm.appendMultipleMessagesToWhatsappNumber(messagesData=messagePot, whatsappNumber=phoneNumber)
-    response_code = 200 if result is True else 500
-    final_response = json.dumps({'response': 'messages appended successfully'}), response_code
-    return createResponseWithAntiCorsHeaders(final_response)
+    try:
+        payload = request.get_json()
+        userMessage = payload["userMessage"]
+        botAnswer = payload["botAnswer"]
+        metaData = payload["metaData"]
+
+        phoneNumber = metaData["phoneNumber"]
+        userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%H:%M'), **metaData}
+        botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'), **metaData,
+                          "sender": "Bot"}
+        messagePot = [userMessageDict, botMessageDict]
+
+        result = fcm.appendMultipleMessagesToWhatsappNumber(messagesData=messagePot, whatsappNumber=phoneNumber)
+        response_code = 200 if result is True else 500
+        final_response = json.dumps({'response': 'messages appended successfully'}), response_code
+
+        return createResponseWithAntiCorsHeaders(final_response)
+
+    except Exception as e:
+        return createResponseWithAntiCorsHeaders((json.dumps({'error': f"An error occurred: {str(e)}"}), 500))
 
 
 def create_order(request=None):
