@@ -49,8 +49,8 @@ jobs:
             "FIREBASE_API_KEY=${FIREBASE_API_KEY}"
             "INSTAGRAM_EMAIL=${INSTAGRAM_EMAIL}"
             "INSTAGRAM_PASSWORD=${INSTAGRAM_PASSWORD}"
-            "SEND_GMAIL_USERNAME=${SEND_GMAIL_USERNAME}"
             "SEND_GMAIL_APP_PASSWORD=${SEND_GMAIL_APP_PASSWORD}"
+            "SEND_GMAIL_USERNAME=${SEND_GMAIL_USERNAME}"
           )
 
            # Join the array elements into a comma-separated string

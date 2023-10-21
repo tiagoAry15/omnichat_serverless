@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 
 
 def send_gmail(subject, body, to_email, gmail_user, gmail_password):
+    adapted_password = ' '.join([gmail_password[i:i+4] for i in range(0, len(gmail_password), 4)])
     # Create the message
     msg = MIMEText(body)
     msg['Subject'] = subject
@@ -16,7 +17,7 @@ def send_gmail(subject, body, to_email, gmail_user, gmail_password):
     try:
         server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
         server.ehlo()
-        server.login(gmail_user, gmail_password)
+        server.login(gmail_user, adapted_password)
         server.sendmail(gmail_user, [to_email], msg.as_string())
         server.close()
         print('Email sent!')
