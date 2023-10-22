@@ -116,7 +116,7 @@ jobs:
           gcloud functions deploy budget_alert_endpoint \
             --source=. \
             --runtime=python39 \
-            --entry-point=read_all_orders \
+            --entry-point=budget_alert_endpoint \
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
