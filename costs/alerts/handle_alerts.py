@@ -14,20 +14,20 @@ from utils.time_utils import convert_timestamp
 app = Flask(__name__)
 
 
-def _decode_dict_from_google_cloud_request(request_json: dict):
+def decode_dict_from_google_cloud_request(request_json: dict):
     encoded_data = request_json["message"]["data"]
     decoded_data = base64.b64decode(encoded_data).decode('utf-8')
     return convert_string_to_dict(decoded_data)
 
 
-def _extract_meaningful_info_from_decoded_dict(decoded_dict: dict):
+def extract_meaningful_info_from_decoded_dict(decoded_dict: dict):
     moneySpent = decoded_dict["costAmount"]
     costIntervalTime = convert_timestamp(decoded_dict["costIntervalStart"])
     percentage_achieved = f"{decoded_dict['alertThresholdExceeded'] * 100}%"
     return moneySpent, costIntervalTime, percentage_achieved
 
 
-def _send_cloud_warning_email(costIntervalTime, moneySpent, percentage_achieved):
+def send_cloud_warning_email(costIntervalTime, moneySpent, percentage_achieved):
     final_string = (f"• Money spent: R${moneySpent}\n"
                     f"• Percentage achieved: {percentage_achieved}\n"
                     f"• Timestamp: {costIntervalTime}."
@@ -49,9 +49,9 @@ def _send_cloud_warning_email(costIntervalTime, moneySpent, percentage_achieved)
 @app.route('/budget-alert', methods=['POST'])
 def budget_alert_endpoint():
     request_json = request.json
-    decoded_dict = _decode_dict_from_google_cloud_request(request.json)
-    moneySpent, costIntervalTime, percentage_achieved = _extract_meaningful_info_from_decoded_dict(decoded_dict)
-    final_string = _send_cloud_warning_email(costIntervalTime, moneySpent, percentage_achieved)
+    decoded_dict = decode_dict_from_google_cloud_request(request.json)
+    moneySpent, costIntervalTime, percentage_achieved = extract_meaningful_info_from_decoded_dict(decoded_dict)
+    final_string = send_cloud_warning_email(costIntervalTime, moneySpent, percentage_achieved)
     return final_string, 200
 
 

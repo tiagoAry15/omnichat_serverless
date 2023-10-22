@@ -109,3 +109,16 @@ jobs:
             --allow-unauthenticated \
             --update-env-vars $UPDATE_ENV_VARS_ARG \
             --stage-bucket=firebase_code_bucket
+
+      - name: Deploy budget_alert Cloud Function
+        run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+          gcloud functions deploy budget_alert_endpoint \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=read_all_orders \
+            --memory 128MB \
+            --trigger-http \
+            --allow-unauthenticated \
+            --update-env-vars $UPDATE_ENV_VARS_ARG \
+            --stage-bucket=firebase_code_bucket
