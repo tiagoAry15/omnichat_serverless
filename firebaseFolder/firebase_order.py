@@ -15,14 +15,6 @@ class FirebaseOrder(FirebaseWrapper):
     def updateConnection(self):
         self.firebaseConnection.changeDatabaseConnection("orders")
 
-    def getNextOrderId(self) -> int:
-        """Get the next available order ID."""
-        # Get the current max order ID from Firebase
-        current_id = self.firebaseConnection.getValue("last_order_id")
-        if not current_id:
-            return 1  # This is the first order
-        return current_id + 1
-
     def createOrder(self, customerName: str, pizzaName: str, status: str, address: str, platform: str,
                     communication: str, observation: str = "None") -> bool:
         if not customerName:
@@ -38,13 +30,10 @@ class FirebaseOrder(FirebaseWrapper):
         if not communication:
             raise ValueError("Communication cannot be empty when creating an order."
                              " Communication example: joao@example.com'")
-        next_order_id = self.getNextOrderId()
-        self.firebaseConnection.setValue("last_order_id", next_order_id)
-        path = f"orders_pool/{next_order_id}"
         orderData = {"timestamp": generateTimestamp(), "customerName": customerName, "pizzaName": pizzaName,
                      "status": status, "address": address, "platform": platform, "communication": communication,
                      "observation": observation}
-        self.firebaseConnection.writeDataWithoutUniqueId(path=path, data=orderData)
+        self.firebaseConnection.writeData(data=orderData)
         return True
 
     def readSingleOrder(self, whatsappNumber: str):
@@ -53,20 +42,17 @@ class FirebaseOrder(FirebaseWrapper):
     def readAllOrders(self):
         return self.firebaseConnection.readData()
 
-    def getOrderById(self, order_id: int):
-        all_orders = self.readAllOrders()
-        if not all_orders:
-            return None
-        return all_orders["orders_pool"][order_id]
+    def getOrderByUniqueId(self, unique_order_id: int):
+        return self.firebaseConnection.getValue(f"orders_pool/{unique_order_id}")
 
-    def updateOrder(self, orderId: int, **kwargs) -> bool:
-        if not orderId:
+    def updateOrder(self, uniqueOrderId: int, **kwargs) -> bool:
+        if not uniqueOrderId:
             raise ValueError("OrderID cannot be empty when updating an order.")
-        userOrder = self.getOrderById(orderId)
+        userOrder = self.getOrderByUniqueId(uniqueOrderId)
         if not userOrder:
             return False
         userOrder.update(kwargs)
-        path = f"orders_pool/{orderId}"
+        path = f"orders_pool/{uniqueOrderId}"
         self.firebaseConnection.overWriteData(path=path, data=userOrder)
         return True
 
@@ -99,9 +85,9 @@ class FirebaseOrder(FirebaseWrapper):
 def __main():
     fc = FirebaseSDKConnection()
     fo = FirebaseOrder(fc)
-    # res = fo.createDummyOrder()
+    res = fo.createDummyOrder()
     # res = fo.readAllOrders()
-    res = fo.updateOrder(orderId=1, observation="Sem cebola")
+    # res = fo.updateOrder(uniqueOrderId=1, observation="Sem cebola")
     # res = fo.getOrderById(1)
     # all_orders = fo.readAllOrders()
     # res = fo.updateOrder(whatsappNumber="+558597648595", status="finished")

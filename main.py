@@ -119,7 +119,7 @@ def update_order(request=None):
         return "'order_id' header cannot be empty", 400
     order_id = request.headers["order_id"]
     remaining_headers = [header for header in request.headers if header != "order_id"]
-    result: bool = fo.updateOrder(orderId=order_id, **{header: request.headers[header] for header in remaining_headers})
+    result: bool = fo.updateOrder(uniqueOrderId=order_id, **{header: request.headers[header] for header in remaining_headers})
     response = "order updated successfully" if result else "error updating order, order does not exist"
     response_code = 200 if result else 500
     final_response = json.dumps({'response': response}), response_code
