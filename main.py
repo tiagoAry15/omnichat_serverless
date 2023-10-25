@@ -63,8 +63,8 @@ def update_multiple_conversations(request=None):
         metaData = payload["metaData"]
 
         phoneNumber = metaData["phoneNumber"]
-        userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%H:%M'), **metaData}
-        botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'), **metaData,
+        userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%Y-%m-%d %H:%M'), **metaData}
+        botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%Y-%m-%d %H:%M'), **metaData,
                           "sender": "Bot"}
         messagePot = [userMessageDict, botMessageDict]
 
@@ -119,7 +119,8 @@ def update_order(request=None):
         return "'order_id' header cannot be empty", 400
     order_id = request.headers["order_id"]
     remaining_headers = [header for header in request.headers if header != "order_id"]
-    result: bool = fo.updateOrder(uniqueOrderId=order_id, **{header: request.headers[header] for header in remaining_headers})
+    result: bool = fo.updateOrder(uniqueOrderId=order_id,
+                                  **{header: request.headers[header] for header in remaining_headers})
     response = "order updated successfully" if result else "error updating order, order does not exist"
     response_code = 200 if result else 500
     final_response = json.dumps({'response': response}), response_code
@@ -136,8 +137,23 @@ def budget_alert_endpoint(request=None):
 
 
 def __main():
-    response = get_all_conversations(get_all_conversations_mock())
-    response_json = json.loads(response[0])
+    mock = [{
+        "body": "Oi",
+        "time": "2021-08-01 20:00",
+        "sender": "User",
+        "from": "whatsapp",
+        "phoneNumber": "558599663533"
+    },
+        {
+            "body": "Olá tudo bem?",
+            "time": "2021-08-01 20:00",
+            "sender": "Bot",
+            "from": "whatsapp",
+            "phoneNumber": "558599663533"
+        }]
+
+    response = fcm.appendMultipleMessagesToWhatsappNumber(mock,"558599663533")
+    print(response)
     return
 
 

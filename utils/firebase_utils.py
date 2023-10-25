@@ -4,30 +4,30 @@ import re
 import uuid
 
 
-def organizeSingleMessageData(messageData: dict, whatsappNumber: str, all_conversations: dict):
+def organizeSingleMessageData(messageData: list[dict], whatsappNumber: str, all_conversations: dict):
     uniqueId = searchUniqueIdAmongConversations(conversationData=all_conversations, userWhatsappNumber=whatsappNumber)
-    timestamp = datetime.datetime.now().strftime("%d/%m/%Y %H:%M")
-    new_message = dict(messageData)
-    new_message['id'] = str(uuid.uuid4())
-    new_message['time'] = timestamp
-    new_message.pop('from', None)
-    new_message.pop('phoneNumber', None)
-
+    newMessagePot = []
+    for message in messageData:
+        new_message = dict(message)
+        new_message['id'] = str(uuid.uuid4())
+        new_message.pop('from', None)
+        new_message.pop('phoneNumber', None)
+        newMessagePot.append(new_message)
     if uniqueId:
         conversationData = all_conversations[uniqueId]
-        conversationData["messagePot"].append(new_message)
-        conversationData['lastMessage_timestamp'] = timestamp
-        conversationData['unreadMessages'] += 1
+        conversationData["messagePot"] += newMessagePot
+        conversationData['lastMessage_timestamp'] = newMessagePot[-1]['time']
+        conversationData['unreadMessages'] += len(newMessagePot)
         return uniqueId, conversationData
     else:
         conversationData = {
-            "name": messageData['sender'],
+            "name": messageData[0]['sender'],
             "status": "active",
             "phoneNumber": whatsappNumber,
-            "from": messageData['from'],
-            "messagePot": [new_message],
-            "unreadMessages": 2,
-            "lastMessage_timestamp": timestamp,
+            "from": messageData[0]['from'],
+            "messagePot": newMessagePot,
+            "unreadMessages": len(newMessagePot),
+            "lastMessage_timestamp": newMessagePot[-1]['time'],
             "isBotActive": True,
         }
         return None, conversationData
