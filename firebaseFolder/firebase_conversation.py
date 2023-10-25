@@ -107,11 +107,11 @@ class FirebaseConversation(FirebaseWrapper):
 
     def updateConversation(self, conversationData: dict) -> bool:
         uniqueId = self.getUniqueIdByWhatsappNumber(conversationData["phoneNumber"])
-        return (
-            self.firebaseConnection.overWriteData(path=uniqueId, data=conversationData)
-            if uniqueId is not None
-            else False
-        )
+
+        # Adicione "conversations/" antes do uniqueId para atualizar dentro do nó de conversations
+        path = f"conversations/{uniqueId}" if uniqueId is not None else False
+
+        return self.firebaseConnection.overWriteData(path=path, data=conversationData) if path is not None else False
 
     def updateConversationAddingUnreadMessages(self, messageData: dict) -> bool or None:
         uniqueId = self.getUniqueIdByWhatsappNumber(messageData["phoneNumber"])
