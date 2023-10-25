@@ -26,7 +26,7 @@ def organizeSingleMessageData(messageData: dict, whatsappNumber: str, all_conver
             "phoneNumber": whatsappNumber,
             "from": messageData['from'],
             "messagePot": [new_message],
-            "unreadMessages": 1,
+            "unreadMessages": 2,
             "lastMessage_timestamp": timestamp,
             "isBotActive": True,
         }
