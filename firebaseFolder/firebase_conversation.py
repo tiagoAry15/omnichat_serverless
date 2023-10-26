@@ -110,8 +110,17 @@ class FirebaseConversation(FirebaseWrapper):
 
         # Adicione "conversations/" antes do uniqueId para atualizar dentro do nó de conversations
         path = f"{self.path}/{uniqueId}" if uniqueId is not None else False
+        if not path:
+            return False
+        existingData =  self.firebaseConnection.readData(path=path)
 
-        return self.firebaseConnection.overWriteData(path=path, data=conversationData) if path is not None else False
+        if existingData is None:
+            return False
+
+        # Atualiza os campos existentes com os novos campos fornecidos em conversationData
+        existingData.update(conversationData)
+
+        return self.firebaseConnection.overWriteData(path=path, data=existingData) if path is not None else False
 
     def updateConversationAddingUnreadMessages(self, messageData: dict) -> bool or None:
         uniqueId = self.getUniqueIdByWhatsappNumber(messageData["phoneNumber"])

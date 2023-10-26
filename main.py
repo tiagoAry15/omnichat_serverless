@@ -43,16 +43,24 @@ def update_conversation(request=None):
 
     if request.method != 'PUT':
         return 'Only PUT requests are accepted', 405
+    try:
+        body = request.get_json()
+        log_memory_usage()
 
-    body = request.get_json()
-    log_memory_usage()
-
-    response = 'conversation updated successfully' if fcm.updateConversation(
-        body) else 'error updating conversation, conversation does not exist'
-    headers = {"Access-Control-Allow-Origin": "*"}
-    response_code = 200 if response else 500
-    final_response = json.dumps({'response': response}), response_code, headers
-    return createResponseWithAntiCorsHeaders(final_response)
+        success = fcm.updateConversation(body)
+        if success:
+            response_message = "Conversation updated successfully"
+            response_code = 200
+        else:
+            response_message = "Error updating conversation. Conversation does not exist."
+            response_code = 404  # Not Found
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+        }
+        final_response = json.dumps({'response': response_message}), response_code, headers
+        return createResponseWithAntiCorsHeaders(final_response)
+    except Exception as e:
+        return createResponseWithAntiCorsHeaders((json.dumps({'error': f"An error occurred: {str(e)}"}), 500))
 
 
 def update_multiple_conversations(request=None):
@@ -137,22 +145,11 @@ def budget_alert_endpoint(request=None):
 
 
 def __main():
-    mock = [{
-        "body": "Oi",
-        "time": "2021-08-01 20:00",
-        "sender": "User",
-        "from": "whatsapp",
-        "phoneNumber": "558599663533"
-    },
-        {
-            "body": "Olá tudo bem?",
-            "time": "2021-08-01 20:00",
-            "sender": "Bot",
-            "from": "whatsapp",
-            "phoneNumber": "558599663533"
-        }]
-
-    response = fcm.appendMultipleMessagesToWhatsappNumber(mock,"558599663533")
+    mock = {
+  "phoneNumber": "558599171902",
+    "unreadMessages": 4
+}
+    response = fcm.updateConversation(mock)
     print(response)
     return
 
