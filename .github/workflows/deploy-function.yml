@@ -82,7 +82,6 @@ jobs:
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
-          
             --update-env-vars=$UPDATE_ENV_VARS_ARG
       - name: Deploy update_multiple_conversations Cloud Function
         run: |
