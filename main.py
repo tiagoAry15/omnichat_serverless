@@ -1,5 +1,6 @@
 import datetime
 import json
+from json import JSONDecodeError
 
 from authentication.auth_factory import FirebaseConnectionFactory
 from authentication.firebase_rules.firebase_toggler import FirebaseToggler
@@ -78,52 +79,78 @@ def update_multiple_conversations(request=None):
         return createResponseWithAntiCorsHeaders((json.dumps({'error': f"An error occurred: {str(e)}"}), 500))
 
 
-def create_order(request=None):
-    REQUIRED_HEADERS = ["customerName", "pizzaName", "status", "address", "platform", "communication"]
+def order_handler(request):
+    operation = request.path.split('/')[-1]  # Gets the last path component (e.g., "create")
+
+    if request.method == 'POST' and operation == 'create':
+        return create_order(request)
+    elif request.method == 'GET' and operation == 'read':
+        return read_all_orders(request)
+    elif request.method == 'PUT' and operation == 'update':
+        return update_order(request)
+    elif request.method == 'DELETE' and operation == 'delete':
+        return delete_order(request)
+    else:
+        return 'Invalid operation or HTTP method', 400
+
+
+def create_order(request):
     if request is None or request.method != 'POST':
         return 'Only POST requests are accepted', 405
 
-    missing_headers = [header for header in REQUIRED_HEADERS if not request.headers.get(header)]
-    if missing_headers:
-        return f"{', '.join(missing_headers)} cannot be empty", 400
+    try:
+        data = request.get_json(force=True)
+    except JSONDecodeError as e:
+        return f'Invalid JSON payload: {e}', 400
 
-    log_memory_usage()
+    REQUIRED_FIELDS = ["customerName", "status", "address", "platform", "communication", "orderItems"]
+    missing_fields = [field for field in REQUIRED_FIELDS if field not in data]
+    if missing_fields:
+        return f"{', '.join(missing_fields)} cannot be empty", 400
 
-    customerName = request.headers["customerName"]
-    pizzaName = request.headers["pizzaName"]
-    status = request.headers["status"]
-    address = request.headers["address"]
-    platform = request.headers["platform"]
-    communication = request.headers["communication"]
-    observation = request.headers.get("observation", None)
+    for item in data["orderItems"]:
+        REQUIRED_ITEM_FIELDS = ["type", "flavors", "size", "quantity", "price"]
+        missing_item_fields = [field for field in REQUIRED_ITEM_FIELDS if field not in item]
+        if missing_item_fields:
+            return f"In orderItems, {', '.join(missing_item_fields)} cannot be empty", 400
 
-    fo.createOrder(customerName=customerName, pizzaName=pizzaName, status=status, address=address,
-                   platform=platform, communication=communication, observation=observation)
-
-    response = 'order created successfully', 200
+    unique_id = fo.createOrder(order_data=data)
+    response = f'Order created successfully! UniqueID = {unique_id}', 200
     return createResponseWithAntiCorsHeaders(response)
 
 
-def read_all_orders(request=None):
+def read_all_orders(request):
     if request is None or request.method != "GET":
         return "Only GET requests are accepted", 405
-    log_memory_usage()
     result = fo.readAllOrders()
     return createResponseWithAntiCorsHeaders(result)
 
 
-def update_order(request=None):
+def update_order(request):
     if request is None or request.method != 'PUT':
         return 'Only PUT requests are accepted', 405
     if "order_id" not in request.headers:
         return "'order_id' header cannot be empty", 400
+    try:
+        data = request.get_json(force=True)
+    except JSONDecodeError as e:
+        return f'Invalid JSON payload: {e}', 400
     order_id = request.headers["order_id"]
-    remaining_headers = [header for header in request.headers if header != "order_id"]
-    result: bool = fo.updateOrder(uniqueOrderId=order_id, **{header: request.headers[header] for header in remaining_headers})
-    response = "order updated successfully" if result else "error updating order, order does not exist"
+    result: bool = fo.updateOrder(order_unique_id=order_id, order_data=data)
+    response = "Order updated successfully" if result else f"Error updating order, order {order_id} does not exist"
     response_code = 200 if result else 500
     final_response = json.dumps({'response': response}), response_code
     return createResponseWithAntiCorsHeaders(final_response)
+
+
+def delete_order(request):
+    if request is None or request.method != 'DELETE':
+        return 'Only DELETE requests are accepted', 405
+    if "order_id" not in request.headers:
+        return "'order_id' header cannot be empty", 400
+    order_id = request.headers["order_id"]
+    result: bool = fo.deleteOrder(order_unique_id=order_id)
+    return createResponseWithAntiCorsHeaders(result)
 
 
 def budget_alert_endpoint(request=None):

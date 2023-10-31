@@ -7,3 +7,4 @@
 .idea/
 /.idea/omnichatServerless.iml
 /costs/token.json
+/costs/cost_breakdown/reports.csv

@@ -84,31 +84,18 @@ jobs:
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
 
-      - name: Deploy create_order Cloud Function
+      - name: Deploy order_handler Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy create_order \
+          gcloud functions deploy order_handler \
             --source=. \
             --runtime=python39 \
-            --entry-point=create_order \
+            --entry-point=order_handler \
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
-
-      - name: Deploy read_all_orders Cloud Function
-        run: |
-          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy read_all_orders \
-            --source=. \
-            --runtime=python39 \
-            --entry-point=read_all_orders \
-            --memory 128MB \
-            --trigger-http \
-            --allow-unauthenticated \
-            --update-env-vars $UPDATE_ENV_VARS_ARG \
-            --stage-bucket=firebase_code_bucket
 
       - name: Deploy budget_alert Cloud Function
         run: |
