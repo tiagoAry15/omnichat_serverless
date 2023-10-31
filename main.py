@@ -80,7 +80,8 @@ def update_multiple_conversations(request=None):
 
 
 def order_handler(request):
-    operation = request.headers.get('operation', None)
+    # operation = request.headers.get('operation', None)
+    operation = request.path.split('/')[-1]
 
     if request.method == 'POST' and operation == 'create':
         return create_order(request)
@@ -122,7 +123,7 @@ def create_order(request):
 def read_all_orders(request):
     if request is None or request.method != "GET":
         return "Only GET requests are accepted", 405
-    result = fo.readAllOrders()
+    result = fo.getAllOrders()
     return createResponseWithAntiCorsHeaders(result)
 
 
