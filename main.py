@@ -8,52 +8,40 @@ from factory.core_instantiations import ft
 from utils.mocks import get_all_conversations_mock
 
 
-def __crud_function_redirect(operation_functions, operation_to_method_mapping, request):
+def __crud_function_redirect(operation_dict, request):
     operation = request.path.split('/')[-1]
     method = request.method
-    if method not in operation_to_method_mapping.values():
-        return f'{method} is an invalid one', 400
-    if operation not in operation_to_method_mapping.keys():
-        valid_operations = ', '.join(operation_to_method_mapping.keys())
-        return f'{operation} is an invalid operation. Valid operations are {valid_operations}', 400
-    required_method = operation_to_method_mapping[operation]
+
+    if operation not in operation_dict:
+        valid_operations = '\n → '.join(operation_dict.keys())
+        return f'{operation} is an invalid operation. Valid operations are \n →{valid_operations}', 400
+
+    required_method, operation_func = operation_dict[operation]
     if method != required_method:
         return f'Only {required_method} requests are accepted for the operation {operation}', 405
-    return operation_functions[operation](request)
+
+    return operation_func(request)
 
 
 def conversation_handler(request):
-    operation_to_method_mapping = {
-        "get_all_conversations": "GET",
-        "update_conversation": "PUT",
-        "update_multiple_conversations": "PUT"
+    operation_dict = {
+        "get_all_conversations": ("GET", get_all_conversations),
+        "update_conversation": ("PUT", update_conversation),
+        "update_multiple_conversations": ("PUT", update_multiple_conversations)
     }
 
-    operation_functions = {
-        "get_all_conversations": get_all_conversations,
-        "update_conversation": update_conversation,
-        "update_multiple_conversations": update_multiple_conversations
-    }
-
-    return __crud_function_redirect(operation_functions, operation_to_method_mapping, request)
+    return __crud_function_redirect(operation_dict, request)
 
 
 def order_handler(request):
-    operation_to_method_mapping = {
-        "create": "POST",
-        "read": "GET",
-        "update": "PUT",
-        "delete": "DELETE"
+    operation_dict = {
+        "create": ("POST", create_order),
+        "read": ("GET", read_all_orders),
+        "update": ("PUT", update_order),
+        "delete": ("DELETE", delete_order)
     }
 
-    operation_functions = {
-        "create": create_order,
-        "read": read_all_orders,
-        "update": update_order,
-        "delete": delete_order
-    }
-
-    return __crud_function_redirect(operation_functions, operation_to_method_mapping, request)
+    return __crud_function_redirect(operation_dict, request)
 
 
 def budget_alert_endpoint(request=None):

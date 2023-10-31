@@ -58,44 +58,6 @@ jobs:
           
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
 
-#      - name: Deploy get_all_conversations Cloud Function
-#        run: |
-#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-#          gcloud functions deploy get_all_conversations \
-#            --source=. \
-#            --runtime=python39 \
-#            --entry-point=get_all_conversations \
-#            --memory 128MB \
-#            --trigger-http \
-#            --allow-unauthenticated \
-#            --stage-bucket=firebase_code_bucket \
-#            --update-env-vars=$UPDATE_ENV_VARS_ARG
-#
-#      - name: Deploy update_conversation Cloud Function
-#        run: |
-#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-#          gcloud functions deploy update_conversation \
-#            --source=. \
-#            --runtime=python39 \
-#            --entry-point=update_conversation \
-#            --memory 128MB \
-#            --trigger-http \
-#            --allow-unauthenticated \
-#            --stage-bucket=firebase_code_bucket \
-#            --update-env-vars=$UPDATE_ENV_VARS_ARG
-#      - name: Deploy update_multiple_conversations Cloud Function
-#        run: |
-#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-#          gcloud functions deploy update_multiple_conversations \
-#            --source=. \
-#            --runtime=python39 \
-#            --entry-point=update_multiple_conversations \
-#            --memory 128MB \
-#            --trigger-http \
-#            --allow-unauthenticated \
-#            --stage-bucket=firebase_code_bucket \
-#            --update-env-vars=$UPDATE_ENV_VARS_ARG
-
       - name: Deploy conversation_handler Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
