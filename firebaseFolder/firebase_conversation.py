@@ -15,6 +15,7 @@ class FirebaseConversation(FirebaseWrapper):
     def __init__(self, inputFirebaseConnection: AbstractFirebaseConnection):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
+        self.path = "/conversations"
 
     def setConnectionInstance(self, inputFirebaseConnection: AbstractFirebaseConnection):
         self.firebaseConnection = inputFirebaseConnection
@@ -28,7 +29,7 @@ class FirebaseConversation(FirebaseWrapper):
     def writeToFirebase(self, uniqueId, conversationData) -> bool:
         try:
             if uniqueId:
-                self.firebaseConnection.overWriteData(path=uniqueId, data=conversationData)
+                self.firebaseConnection.overWriteData(path=f"{self.path}/{uniqueId}", data=conversationData)
             else:
                 self.createConversation(conversationData)
             return True
@@ -68,8 +69,7 @@ class FirebaseConversation(FirebaseWrapper):
 
     def appendMultipleMessagesToWhatsappNumber(self, messagesData: List[dict], whatsappNumber: str) -> bool:
         all_conversations = self.getAllConversations()
-        uniqueId, conversationData = organizeSingleMessageData(messagesData[0], whatsappNumber, all_conversations)
-        conversationData["messagePot"] = conversationData["messagePot"] + messagesData[1:]
+        uniqueId, conversationData = organizeSingleMessageData(messagesData, whatsappNumber, all_conversations)
         return self.writeToFirebase(uniqueId, conversationData)
 
     def retrieveAllMessagesByWhatsappNumber(self, whatsappNumber: str) -> List[dict] or None:
@@ -102,16 +102,25 @@ class FirebaseConversation(FirebaseWrapper):
         existingConversation = self.existingConversation(conversationData)
         return (
             False if existingConversation
-            else self.firebaseConnection.writeData(data=conversationData)
+            else self.firebaseConnection.writeData(path=self.path, data=conversationData)
         )
 
     def updateConversation(self, conversationData: dict) -> bool:
         uniqueId = self.getUniqueIdByWhatsappNumber(conversationData["phoneNumber"])
-        return (
-            self.firebaseConnection.overWriteData(path=uniqueId, data=conversationData)
-            if uniqueId is not None
-            else False
-        )
+
+        # Adicione "conversations/" antes do uniqueId para atualizar dentro do nó de conversations
+        path = f"{self.path}/{uniqueId}" if uniqueId is not None else False
+        if not path:
+            return False
+        existingData =  self.firebaseConnection.readData(path=path)
+
+        if existingData is None:
+            return False
+
+        # Atualiza os campos existentes com os novos campos fornecidos em conversationData
+        existingData.update(conversationData)
+
+        return self.firebaseConnection.overWriteData(path=path, data=existingData) if path is not None else False
 
     def updateConversationAddingUnreadMessages(self, messageData: dict) -> bool or None:
         uniqueId = self.getUniqueIdByWhatsappNumber(messageData["phoneNumber"])

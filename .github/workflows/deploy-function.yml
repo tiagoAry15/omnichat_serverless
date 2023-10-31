@@ -35,7 +35,7 @@ jobs:
           service_account_key: ${{ secrets.GCLOUD_SERVICE_ACCOUNT_KEY }}
           export_default_credentials: true
 
-      - name: Set env vars for Cloud Run deployment
+      - name: Set .env vars for Cloud Run deployment
         run: |# Create an array with all the environment variable assignments
           ENV_VARS_ARRAY=(
             "SDK_TYPE=${SDK_TYPE}"
@@ -71,6 +71,19 @@ jobs:
             --stage-bucket=firebase_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
 
+      - name: Deploy update_conversation Cloud Function
+        run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+          gcloud functions deploy update_conversation \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=update_conversation \
+            --memory 128MB \
+            --trigger-http \
+            --allow-unauthenticated \
+            --stage-bucket=firebase_code_bucket \
+          
+            --update-env-vars=$UPDATE_ENV_VARS_ARG
       - name: Deploy update_multiple_conversations Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
