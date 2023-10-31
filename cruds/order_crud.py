@@ -33,8 +33,9 @@ def create_order(request):
 def read_all_orders(request):
     if request is None or request.method != "GET":
         return "Only GET requests are accepted", 405
-    result = fo.getAllOrders()
-    return createResponseWithAntiCorsHeaders(result)
+    orders = fo.getAllOrders()
+    arrayOfOrders = list(orders.values()) if orders is not None else ["None"]
+    return createResponseWithAntiCorsHeaders(arrayOfOrders)
 
 
 def update_order(request):
