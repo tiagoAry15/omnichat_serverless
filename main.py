@@ -80,7 +80,7 @@ def update_multiple_conversations(request=None):
 
 
 def order_handler(request):
-    operation = request.path.split('/')[-1]  # Gets the last path component (e.g., "create")
+    operation = request.headers.get('operation', None)
 
     if request.method == 'POST' and operation == 'create':
         return create_order(request)
