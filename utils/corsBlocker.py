@@ -11,3 +11,12 @@ def createResponseWithAntiCorsHeaders(data):
         "Access-Control-Allow-Methods": "*"
     }
     return Response(dump_response, headers=response_headers)
+
+
+def getAntiCorsHeaders():
+    return {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, PUT",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Max-Age": "3600",
+    }

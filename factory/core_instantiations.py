@@ -2,9 +2,11 @@ from authentication.auth_factory import FirebaseConnectionFactory
 from authentication.firebase_rules.firebase_toggler import FirebaseToggler
 from firebaseFolder.firebase_conversation import FirebaseConversation
 from firebaseFolder.firebase_order import FirebaseOrder
+from firebaseFolder.firebase_user import FirebaseUser
 
 factory = FirebaseConnectionFactory()
 fc = factory.create_connection("HTTP")
 fcm = FirebaseConversation(fc)
 fo = FirebaseOrder(fc)
+fu = FirebaseUser(fc)
 ft = FirebaseToggler()

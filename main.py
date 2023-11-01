@@ -4,6 +4,7 @@ from costs.alerts.handle_alerts import decode_dict_from_google_cloud_request, \
     extract_meaningful_info_from_decoded_dict, send_cloud_warning_email
 from cruds.conversation_crud import get_all_conversations, update_conversation, update_multiple_conversations
 from cruds.order_crud import delete_order, update_order, read_all_orders, create_order
+from cruds.user_crud import create_user, get_user, update_user, delete_user
 from factory.core_instantiations import ft
 from utils.mocks import get_all_conversations_mock
 
@@ -39,6 +40,17 @@ def order_handler(request):
         "read": ("GET", read_all_orders),
         "update": ("PUT", update_order),
         "delete": ("DELETE", delete_order)
+    }
+
+    return __crud_function_redirect(operation_dict, request)
+
+
+def user_handler(request):
+    operation_dict = {
+        "create": ("POST", create_user),
+        "read": ("GET", get_user),
+        "update": ("PUT", update_user),
+        "delete": ("DELETE", delete_user)
     }
 
     return __crud_function_redirect(operation_dict, request)
