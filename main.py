@@ -7,6 +7,7 @@ from cruds.order_crud import delete_order, update_order, read_all_orders, create
 from cruds.user_crud import create_user, get_user, update_user, delete_user
 from factory.core_instantiations import ft
 from utils.mocks import get_all_conversations_mock, MockRequest
+from factory.core_instantiations import g
 
 
 def __crud_function_redirect(operation_dict, request):
@@ -28,7 +29,7 @@ def __crud_function_redirect(operation_dict, request):
 
     # Add the url_parameter to the request headers if it exists
     if url_parameter:
-        request.headers['parameter'] = url_parameter
+        g.url_parameter = url_parameter
 
     return operation_func(request)
 

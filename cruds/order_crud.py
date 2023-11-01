@@ -1,14 +1,13 @@
 import json
 from json import JSONDecodeError
 
-from factory.core_instantiations import fo
+from factory.core_instantiations import fo, g
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 
 
 def create_order(request):
     if request is None or request.method != 'POST':
         return 'Only POST requests are accepted', 405
-
     try:
         data = request.get_json(force=True)
     except JSONDecodeError as e:
@@ -41,8 +40,9 @@ def read_all_orders(request):
 def update_order(request):
     if request is None or request.method != 'PUT':
         return 'Only PUT requests are accepted', 405
-    if "parameter" not in request.headers:
-        return "'parameter' header cannot be empty", 400
+    url_param = getattr(g, 'url_parameter', None)
+    if not url_param:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     try:
         data = request.get_json(force=True)
     except JSONDecodeError as e:
@@ -58,8 +58,9 @@ def update_order(request):
 def delete_order(request):
     if request is None or request.method != 'DELETE':
         return 'Only DELETE requests are accepted', 405
-    if "parameter" not in request.headers:
-        return "'parameter' header cannot be empty", 400
+    url_param = getattr(g, 'url_parameter', None)
+    if not url_param:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     order_id = request.headers["parameter"]
     result: bool = fo.deleteOrder(order_unique_id=order_id)
     return createResponseWithAntiCorsHeaders(result)
