@@ -1,3 +1,4 @@
+from authentication.abstraction.abstract_connection import AbstractFirebaseConnection
 from authentication.sdk_auth.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 from utils.patterns import singleton
@@ -5,9 +6,10 @@ from utils.patterns import singleton
 
 @singleton
 class FirebaseUser(FirebaseWrapper):
-    def __init__(self, inputFirebaseConnection: FirebaseSDKConnection):
+    def __init__(self, inputFirebaseConnection: AbstractFirebaseConnection):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
+        self.path = "/users"
 
     def updateConnection(self):
         self.firebaseConnection.changeDatabaseConnection("users")

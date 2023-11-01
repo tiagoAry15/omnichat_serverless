@@ -35,18 +35,14 @@ def create_user(request=None):
 
 
 def get_user(request=None):
-    logging.warning(f"Request object: {request}")
     if request is None or request.method != 'GET':
         return 'Only GET requests are accepted', 405
     url_parameter = request.headers.get('url_parameter')
-    logging.warning(f"Extracted URL Parameter: {url_parameter}")
     if not url_parameter:
         return "'url_parameter' cannot be empty.", 400
     user_id = request.headers['url_parameter']
-    logging.warning(f"Trying to fetch user with ID: {user_id}")
     user = str(fu.getUser(user_id))
-    logging.warning(f"Fetched User: {user}")
-    return "ABCDEFG", 200
+    return user, 200
 
 
 def update_user(request=None):
