@@ -1,6 +1,7 @@
 from requests import JSONDecodeError
+
+from cruds.crud_utils import get_url_param
 from factory.core_instantiations import fu
-from factory.core_instantiations import g as global_object
 from utils.corsBlocker import getAntiCorsHeaders
 
 
@@ -34,11 +35,9 @@ def create_user(request=None):
 def get_user(request=None):
     if request is None or request.method != 'GET':
         return 'Only GET requests are accepted', 405
-    if hasattr(global_object, 'url_parameter'):
-        url_param = getattr(global_object, 'url_parameter', None)
-        delattr(global_object, 'url_parameter')
-    else:
-        return "'url_parameter' cannot be empty. There was no url parameter in the request", 40
+    url_param = get_url_param()
+    if url_param is None:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     user_id = url_param
     user = fu.getUser(user_id)
     return user, 200, getAntiCorsHeaders()
@@ -47,11 +46,9 @@ def get_user(request=None):
 def update_user(request=None):
     if request is None or request.method != 'PUT':
         return 'Only PUT requests are accepted', 405
-    if hasattr(global_object, 'url_parameter'):
-        url_param = getattr(global_object, 'url_parameter', None)
-        delattr(global_object, 'url_parameter')
-    else:
-        return "'url_parameter' cannot be empty. There was no url parameter in the request", 40
+    url_param = get_url_param()
+    if url_param is None:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     try:
         data = request.get_json(force=True)
     except JSONDecodeError as e:
@@ -67,11 +64,9 @@ def update_user(request=None):
 def delete_user(request=None):
     if request is None or request.method != 'DELETE':
         return 'Only DELETE requests are accepted', 405
-    if hasattr(global_object, 'url_parameter'):
-        url_param = getattr(global_object, 'url_parameter', None)
-        delattr(global_object, 'url_parameter')
-    else:
-        return "'url_parameter' cannot be empty. There was no url parameter in the request", 40
+    url_param = get_url_param()
+    if url_param is None:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     user_id = url_param
     result: bool = fu.deleteUser(user_unique_id=user_id)
     response = "User deleted successfully" if result else f"Error deleting user, user {user_id} does not exist"
