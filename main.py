@@ -6,7 +6,7 @@ from cruds.conversation_crud import get_all_conversations, update_conversation, 
 from cruds.order_crud import delete_order, update_order, read_all_orders, create_order
 from cruds.user_crud import create_user, get_user, update_user, delete_user
 from factory.core_instantiations import ft
-from utils.mocks import get_all_conversations_mock, MockRequest
+from utils.mocks import MockRequest
 from factory.core_instantiations import g
 
 

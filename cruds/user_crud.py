@@ -40,7 +40,7 @@ def get_user(request=None):
         return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     user_id = url_param
     user = fu.getUser(user_id)
-    return user, 200, getAntiCorsHeaders()
+    return user, 200
 
 
 def update_user(request=None):

@@ -58,31 +58,31 @@ jobs:
           
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
 
-      - name: Deploy conversation_handler Cloud Function
-        run: |
-          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy conversation_handler \
-            --source=. \
-            --runtime=python39 \
-            --entry-point=conversation_handler \
-            --memory 128MB \
-            --trigger-http \
-            --allow-unauthenticated \
-            --stage-bucket=firebase_code_bucket \
-            --update-env-vars=$UPDATE_ENV_VARS_ARG
-
-      - name: Deploy order_handler Cloud Function
-        run: |
-          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy order_handler \
-            --source=. \
-            --runtime=python39 \
-            --entry-point=order_handler \
-            --memory 128MB \
-            --trigger-http \
-            --allow-unauthenticated \
-            --stage-bucket=firebase_code_bucket \
-            --update-env-vars=$UPDATE_ENV_VARS_ARG
+#      - name: Deploy conversation_handler Cloud Function
+#        run: |
+#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+#          gcloud functions deploy conversation_handler \
+#            --source=. \
+#            --runtime=python39 \
+#            --entry-point=conversation_handler \
+#            --memory 128MB \
+#            --trigger-http \
+#            --allow-unauthenticated \
+#            --stage-bucket=firebase_code_bucket \
+#            --update-env-vars=$UPDATE_ENV_VARS_ARG
+#
+#      - name: Deploy order_handler Cloud Function
+#        run: |
+#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+#          gcloud functions deploy order_handler \
+#            --source=. \
+#            --runtime=python39 \
+#            --entry-point=order_handler \
+#            --memory 128MB \
+#            --trigger-http \
+#            --allow-unauthenticated \
+#            --stage-bucket=firebase_code_bucket \
+#            --update-env-vars=$UPDATE_ENV_VARS_ARG
 
       - name: Deploy user_handler Cloud Function
         run: |
