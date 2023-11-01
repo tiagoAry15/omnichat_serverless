@@ -1,3 +1,4 @@
+from flask import jsonify
 from requests import JSONDecodeError
 
 from cruds.crud_utils import get_url_param
@@ -40,7 +41,7 @@ def get_user(request=None):
         return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     user_id = url_param
     user = fu.getUser(user_id)
-    return user, 200
+    return jsonify(user), 200
 
 
 def update_user(request=None):
