@@ -46,8 +46,7 @@ def get_user(request=None):
     logging.warning(f"Trying to fetch user with ID: {user_id}")
     user = str(fu.getUser(user_id))
     logging.warning(f"Fetched User: {user}")
-    return user, 200
-
+    return "ABCDEFG", 200
 
 
 def update_user(request=None):
