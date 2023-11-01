@@ -1,3 +1,5 @@
+import json
+
 from costs.alerts.handle_alerts import decode_dict_from_google_cloud_request, \
     extract_meaningful_info_from_decoded_dict, send_cloud_warning_email
 from cruds.conversation_crud import get_all_conversations, update_conversation, update_multiple_conversations
@@ -24,7 +26,13 @@ def __crud_function_redirect(operation_dict, request):
     if request.method != required_method:
         return f'Only {required_method} requests are accepted for the operation {operation}', 405
     fake_headers = {'Content-Type': 'application/json', 'url_parameter': url_parameter}
-    body = request.json if request.json else {}
+    if request.headers.get('Content-Type') == 'application/json':
+        try:
+            body = request.json
+        except json.JSONDecodeError:
+            body = {}
+    else:
+        body = {}
     fake_request_object = MockRequest(path=request.path, method=request.method, headers=fake_headers,
                                       json_data=body)
     return operation_func(fake_request_object)
