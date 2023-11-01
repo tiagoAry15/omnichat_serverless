@@ -40,15 +40,11 @@ def get_user(request=None):
     url_parameter = request.headers.get('url_parameter')
     if not url_parameter:
         return "'url_parameter' cannot be empty.", 400
-    user_id = str(request.headers['url_parameter'])
-    warning_1 = f"Trying to get user with id: {user_id}"
-    print(warning_1)
-    logging.warning(warning_1)
-    user = str(fu.getUser(user_id))
-    warning_2 = f"User fetched: {user}"
-    print(warning_2)
-    logging.warning(warning_2)
-    return user, 200
+    all_users_data = fu.getAllUsers()
+    for unique_id, user_data in all_users_data.items():
+        if user_data.get('email', None) == url_parameter:
+            return user_data, 200
+    return f"Could not find user for {url_parameter}", 400
 
 
 def update_user(request=None):
