@@ -10,12 +10,16 @@ from utils.mocks import get_all_conversations_mock
 
 
 def __crud_function_redirect(operation_dict, request):
-    operation = request.path.split('/')[-1]
+    path_segments = request.path.split('/')
+    operation = path_segments[-1]
     method = request.method
 
     if operation not in operation_dict:
-        valid_operations = '\n → '.join(operation_dict.keys())
-        return f'{operation} is an invalid operation. Valid operations are \n →{valid_operations}', 400
+        if len(path_segments) > 1 and path_segments[-2] in operation_dict:
+            operation = path_segments[-2]
+        else:
+            valid_operations = '\n → '.join(operation_dict.keys())
+            return f'{operation} is an invalid operation. Valid operations are \n →{valid_operations}', 400
 
     required_method, operation_func = operation_dict[operation]
     if method != required_method:
