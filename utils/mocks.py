@@ -7,10 +7,13 @@ class MockRequest:
         self.path = path
         self.method = method
         self.headers = headers or {}
-        self._json = json_data
+        self.json = json_data
 
     def json(self):
-        return self._json
+        return self.json
+
+    def get_json(self, force=False, silent=False, cache=True):
+        return self.json
 
 
 def test_create_conversation_mock(phoneNumber: str = "+558599171902", body: str = "Olá!", sender: str = "John"):

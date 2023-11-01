@@ -35,7 +35,8 @@ class FirebaseUser(FirebaseWrapper):
         return None
 
     def existingUser(self, inputUserData: dict) -> bool:
-        uniqueId = self.getUniqueIdByPhoneNumber(inputUserData["phoneNumber"])
+        phoneNumber = inputUserData["phoneNumber"]
+        uniqueId = self.getUniqueIdByPhoneNumber(phoneNumber)
         return uniqueId is not None
 
     def createUser(self, userData: dict) -> bool:

@@ -24,7 +24,8 @@ def __crud_function_redirect(operation_dict, request):
     if request.method != required_method:
         return f'Only {required_method} requests are accepted for the operation {operation}', 405
     fake_headers = {'Content-Type': 'application/json', 'url_parameter': url_parameter}
-    fake_request_object = MockRequest(path=request.path, method=request.method, headers=fake_headers)
+    fake_request_object = MockRequest(path=request.path, method=request.method, headers=fake_headers,
+                                      json_data=request.json)
     return operation_func(fake_request_object)
 
 
@@ -75,7 +76,9 @@ def __main():
     # print(response1)
 
     # Mocked data for a read operation with a user_id
-    mock_request2 = MockRequest(path="/user_handler/read/558599171902", method="GET")
+    body = {"address": "Rua da Paz 4987", "cpf": "14568598577", "name": "Ednaldo Pereira",
+            "phoneNumber": "+558597648593"}
+    mock_request2 = MockRequest(path="/user_handler/create", method="POST", json_data=body)
     response2 = user_handler(mock_request2)
     print(response2)
 
