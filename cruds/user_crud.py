@@ -40,7 +40,7 @@ def get_user(request=None):
     url_parameter = request.headers.get('url_parameter')
     if not url_parameter:
         return "'url_parameter' cannot be empty.", 400
-    user_id = request.headers['url_parameter']
+    user_id = str(request.headers['url_parameter'])
     user = str(fu.getUser(user_id))
     return user, 200
 
