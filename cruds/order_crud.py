@@ -1,7 +1,8 @@
 import json
 from json import JSONDecodeError
 
-from factory.core_instantiations import fo, g
+from factory.core_instantiations import fo
+from factory.core_instantiations import g as global_object
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 
 
@@ -40,14 +41,16 @@ def read_all_orders(request):
 def update_order(request):
     if request is None or request.method != 'PUT':
         return 'Only PUT requests are accepted', 405
-    url_param = getattr(g, 'url_parameter', None)
-    if not url_param:
-        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
+    if hasattr(global_object, 'url_parameter'):
+        url_param = getattr(global_object, 'url_parameter', None)
+        delattr(global_object, 'url_parameter')
+    else:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 40
     try:
         data = request.get_json(force=True)
     except JSONDecodeError as e:
         return f'Invalid JSON payload: {e}', 400
-    order_id = request.headers["parameter"]
+    order_id = url_param
     result: bool = fo.updateOrder(order_unique_id=order_id, order_data=data)
     response = "Order updated successfully" if result else f"Error updating order, order {order_id} does not exist"
     response_code = 200 if result else 500
@@ -58,9 +61,11 @@ def update_order(request):
 def delete_order(request):
     if request is None or request.method != 'DELETE':
         return 'Only DELETE requests are accepted', 405
-    url_param = getattr(g, 'url_parameter', None)
-    if not url_param:
-        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
-    order_id = request.headers["parameter"]
+    if hasattr(global_object, 'url_parameter'):
+        url_param = getattr(global_object, 'url_parameter', None)
+        delattr(global_object, 'url_parameter')
+    else:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 40
+    order_id = url_param
     result: bool = fo.deleteOrder(order_unique_id=order_id)
     return createResponseWithAntiCorsHeaders(result)
