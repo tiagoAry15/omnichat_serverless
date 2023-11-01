@@ -34,18 +34,11 @@ def create_user(request=None):
     return response, 200, headers
 
 
-def get_user(request=None):
+def get_all_users(request=None):
     if request is None or request.method != 'GET':
         return 'Only GET requests are accepted', 405
-    url_parameter = request.headers.get('url_parameter')
-    if not url_parameter:
-        return "'url_parameter' cannot be empty.", 400
     all_users_data = fu.getAllUsers()
-    logging.warning(f"all_users_data: {all_users_data}")
-    for unique_id, user_data in all_users_data.items():
-        if user_data.get('phoneNumber', None) == url_parameter:
-            return user_data, 200
-    return f"Could not find user for {url_parameter}", 400
+    return all_users_data, 200
 
 
 def update_user(request=None):

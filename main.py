@@ -1,12 +1,9 @@
-import json
-
 from costs.alerts.handle_alerts import decode_dict_from_google_cloud_request, \
     extract_meaningful_info_from_decoded_dict, send_cloud_warning_email
 from cruds.conversation_crud import get_all_conversations, update_conversation, update_multiple_conversations
 from cruds.order_crud import delete_order, update_order, read_all_orders, create_order
-from cruds.user_crud import create_user, get_user, update_user, delete_user
+from cruds.user_crud import create_user, get_all_users, update_user, delete_user
 from factory.core_instantiations import ft
-from utils.commandPattern import CreateUserCommand, GetUserCommand, UpdateUserCommand, DeleteUserCommand
 from utils.mocks import MockRequest
 
 
@@ -54,10 +51,10 @@ def order_handler(request):
 
 def user_handler(request):
     operation_dict = {
-        "create": ("POST", CreateUserCommand),
-        "read": ("GET", get_user),
-        "update": ("PUT", UpdateUserCommand),
-        "delete": ("DELETE", DeleteUserCommand)
+        "create": ("POST", create_user),
+        "read": ("GET", get_all_users),
+        "update": ("PUT", update_user),
+        "delete": ("DELETE", delete_user)
     }
     return __crud_function_redirect(operation_dict, request)
 
