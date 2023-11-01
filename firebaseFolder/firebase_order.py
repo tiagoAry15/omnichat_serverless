@@ -24,7 +24,6 @@ class FirebaseOrder(FirebaseWrapper):
     def getOrder(self, order_unique_id: str):
         return self.firebaseConnection.getValue(order_unique_id)
 
-
     def updateOrder(self, order_unique_id: str, order_data: dict):
         order = self.getOrder(order_unique_id)
         for key in order_data.keys():

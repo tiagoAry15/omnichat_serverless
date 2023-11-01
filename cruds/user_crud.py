@@ -41,6 +41,7 @@ def get_user(request=None):
     if not url_parameter:
         return "'url_parameter' cannot be empty.", 400
     all_users_data = fu.getAllUsers()
+    logging.warning(f"all_users_data: {all_users_data}")
     for unique_id, user_data in all_users_data.items():
         if user_data.get('phoneNumber', None) == url_parameter:
             return user_data, 200
