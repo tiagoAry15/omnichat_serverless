@@ -41,7 +41,7 @@ class FirebaseHTTPConnection(AbstractFirebaseConnection):
         url = self.get_url(path)
         response = requests.post(url, json=data)
         response.raise_for_status()
-        return True
+        return response.json()['name']
 
     def writeDataWithoutUniqueId(self, path: str = None, data: dict = None) -> bool:
         path = path or self.connection

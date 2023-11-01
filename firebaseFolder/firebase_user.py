@@ -39,12 +39,11 @@ class FirebaseUser(FirebaseWrapper):
         uniqueId = self.getUniqueIdByPhoneNumber(phoneNumber)
         return uniqueId is not None
 
-    def createUser(self, userData: dict) -> bool:
+    def createUser(self, userData: dict):
         existingUser = self.existingUser(userData)
-        return (
-            False if existingUser
-            else self.firebaseConnection.writeData(data=userData)
-        )
+        if existingUser:
+            return False
+        return self.firebaseConnection.writeData(data=userData)
 
     def updateUser(self, userData: dict) -> bool:
         existingUser = self.existingUser(userData)
