@@ -13,23 +13,22 @@ from utils.mocks import MockRequest
 def __crud_function_redirect(operation_dict, request):
     path_segments = request.path.split('/')
     operation = path_segments[-1]
-    url_parameter = None if len(path_segments) < 3 else path_segments[-2]
+    url_parameter = None
 
-    # Check operation validity
     if operation not in operation_dict:
         if len(path_segments) > 2 and path_segments[-2] in operation_dict:
             operation = path_segments[-2]
             url_parameter = path_segments[-1]
         else:
             valid_operations = '\n → '.join(operation_dict.keys())
-            return f'{operation} is an invalid operation. Valid operations are \n → {valid_operations}', 400
+            return f'{operation} is an invalid operation. Valid operations are \n →{valid_operations}', 400
 
-    required_method, command_class = operation_dict[operation]
+    required_method, operation_func = operation_dict[operation]
     if request.method != required_method:
         return f'Only {required_method} requests are accepted for the operation {operation}', 405
-
-    command_instance = command_class()
-    return command_instance.execute(request, url_parameter)
+    fake_headers = {'Content-Type': 'application/json', 'url_parameter': url_parameter}
+    fake_request_object = MockRequest(path=request.path, method=request.method, headers=fake_headers)
+    return operation_func(fake_request_object)
 
 
 def conversation_handler(request):
@@ -56,7 +55,7 @@ def order_handler(request):
 def user_handler(request):
     operation_dict = {
         "create": ("POST", CreateUserCommand),
-        "read": ("GET", GetUserCommand),
+        "read": ("GET", get_user),
         "update": ("PUT", UpdateUserCommand),
         "delete": ("DELETE", DeleteUserCommand)
     }
@@ -75,9 +74,9 @@ def budget_alert_endpoint(request=None):
 
 def __main():
     # Mocked data for a read operation without a user_id
-    # mock_request1 = MockRequest(path="/user_handler/read", method="GET")
-    # response1 = user_handler(mock_request1)
-    # print(response1)
+    mock_request1 = MockRequest(path="/user_handler/read", method="GET")
+    response1 = user_handler(mock_request1)
+    print(response1)
 
     # Mocked data for a read operation with a user_id
     mock_request2 = MockRequest(path="/user_handler/read/558599171902", method="GET")

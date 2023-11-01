@@ -32,12 +32,13 @@ def create_user(request=None):
     return response, 200, headers
 
 
-def get_user(request=None, url_parameter=None):
+def get_user(request=None):
     if request is None or request.method != 'GET':
         return 'Only GET requests are accepted', 405
-    if url_parameter is None:
-        return "'url_parameter' cannot be empty. There was no url parameter in the request", 40
-    user_id = url_parameter
+    url_parameter = request.headers.get('url_parameter')
+    if not url_parameter:
+        return "'url_parameter' cannot be empty.", 400
+    user_id = request.headers['url_parameter']
     user = str(fu.getUser(user_id))
     return user, 200
 
