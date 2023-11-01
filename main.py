@@ -12,18 +12,23 @@ from utils.mocks import get_all_conversations_mock
 def __crud_function_redirect(operation_dict, request):
     path_segments = request.path.split('/')
     operation = path_segments[-1]
-    method = request.method
+    url_parameter = None
 
     if operation not in operation_dict:
-        if len(path_segments) > 1 and path_segments[-2] in operation_dict:
+        if len(path_segments) > 2 and path_segments[-2] in operation_dict:
             operation = path_segments[-2]
+            url_parameter = path_segments[-1]
         else:
             valid_operations = '\n → '.join(operation_dict.keys())
             return f'{operation} is an invalid operation. Valid operations are \n →{valid_operations}', 400
 
     required_method, operation_func = operation_dict[operation]
-    if method != required_method:
+    if request.method != required_method:
         return f'Only {required_method} requests are accepted for the operation {operation}', 405
+
+    # Add the url_parameter to the request headers if it exists
+    if url_parameter:
+        request.headers['parameter'] = url_parameter
 
     return operation_func(request)
 
