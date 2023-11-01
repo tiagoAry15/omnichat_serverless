@@ -23,8 +23,8 @@ def get_user(request=None):
         return 'Only GET requests are accepted', 405
     if "parameter" not in request.headers:
         return "'parameter' header cannot be empty", 400
-    user_id = request.headers["user_id"]
-    user = fu.getUser(user_unique_id=user_id)
+    user_id = request.headers["parameter"]
+    user = fu.getUser(user_id)
     return user, 200, getAntiCorsHeaders()
 
 

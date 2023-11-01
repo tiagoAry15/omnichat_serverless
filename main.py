@@ -6,7 +6,7 @@ from cruds.conversation_crud import get_all_conversations, update_conversation, 
 from cruds.order_crud import delete_order, update_order, read_all_orders, create_order
 from cruds.user_crud import create_user, get_user, update_user, delete_user
 from factory.core_instantiations import ft
-from utils.mocks import get_all_conversations_mock
+from utils.mocks import get_all_conversations_mock, MockRequest
 
 
 def __crud_function_redirect(operation_dict, request):
@@ -75,9 +75,15 @@ def budget_alert_endpoint(request=None):
 
 
 def __main():
-    response = get_all_conversations(get_all_conversations_mock())
-    response_json = json.loads(response[0])
-    return
+    # Mocked data for a read operation without a user_id
+    mock_request1 = MockRequest(path="/user_handler/read", method="GET")
+    response1 = user_handler(mock_request1)
+    print(response1)
+
+    # Mocked data for a read operation with a user_id
+    mock_request2 = MockRequest(path="/user_handler/read/558599171902", method="GET")
+    response2 = user_handler(mock_request2)
+    print(response2)
 
 
 if __name__ == '__main__':

@@ -3,9 +3,14 @@ from unittest.mock import Mock
 
 
 class MockRequest:
-    def __init__(self, headers: List[str] = None, method: str = "GET"):
-        self.headers = headers
+    def __init__(self, path, method, headers=None, json_data=None):
+        self.path = path
         self.method = method
+        self.headers = headers or {}
+        self._json = json_data
+
+    def json(self):
+        return self._json
 
 
 def test_create_conversation_mock(phoneNumber: str = "+558599171902", body: str = "Olá!", sender: str = "John"):

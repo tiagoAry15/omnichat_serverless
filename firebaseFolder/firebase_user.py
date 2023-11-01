@@ -15,6 +15,13 @@ class FirebaseUser(FirebaseWrapper):
     def getAllUsers(self):
         return self.firebaseConnection.readData()
 
+    def getUser(self, phoneNumber: str):
+        all_users = self.getAllUsers()
+        for uniqueId, userData in all_users.items():
+            if userData["phoneNumber"] == phoneNumber:
+                return userData
+        return None
+
     def getUniqueIdByPhoneNumber(self, phoneNumber: str) -> str or None:
         # sourcery skip: use-next
         allUsers = self.getAllUsers()
