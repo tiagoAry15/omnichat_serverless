@@ -8,7 +8,7 @@ from firebaseFolder.firebase_user import FirebaseUser
 factory = FirebaseConnectionFactory()
 fc = factory.create_connection("HTTP")
 fcm = FirebaseConversation(fc)
-fo = FirebaseOrder(fc)
 fu = FirebaseUser(fc)
+fo = FirebaseOrder(fc)
 ft = FirebaseToggler()
 g = GlobalObject()

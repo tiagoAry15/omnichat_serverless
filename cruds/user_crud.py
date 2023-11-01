@@ -41,7 +41,13 @@ def get_user(request=None):
     if not url_parameter:
         return "'url_parameter' cannot be empty.", 400
     user_id = str(request.headers['url_parameter'])
+    warning_1 = f"Trying to get user with id: {user_id}"
+    print(warning_1)
+    logging.warning(warning_1)
     user = str(fu.getUser(user_id))
+    warning_2 = f"User fetched: {user}"
+    print(warning_2)
+    logging.warning(warning_2)
     return user, 200
 
 
