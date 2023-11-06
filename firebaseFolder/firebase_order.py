@@ -22,7 +22,7 @@ class FirebaseOrder(FirebaseWrapper):
         return self.firebaseConnection.writeData(path=now, data=order_data)
 
     def getOrder(self, order_unique_id: str):
-        return self.firebaseConnection.getValue(order_unique_id)
+        return self.firebaseConnection.getValue(f'orders/{order_unique_id}')
 
     def updateOrder(self, order_unique_id: str, order_data: dict):
         order = self.getOrder(order_unique_id)
