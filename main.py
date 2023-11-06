@@ -26,6 +26,7 @@ def __crud_function_redirect(operation_dict, request):
     if request.method != required_method:
         return f'Only {required_method} requests are accepted for the operation {operation}', 405
     fake_headers = {'Content-Type': 'application/json', 'url_parameter': url_parameter}
+    fake_headers.update(request.headers)
     if request.headers.get('Content-Type') == 'application/json':
         try:
             body = request.json
@@ -51,7 +52,7 @@ def conversation_handler(request):
 def order_handler(request):
     operation_dict = {
         "create": ("POST", create_order),
-        "read": ("GET", read_all_orders),
+        "read": ("GET", get_order_handler),
         "update": ("PUT", update_order),
         "delete": ("DELETE", delete_order)
     }
@@ -91,8 +92,12 @@ def __main():
     # response2 = user_handler(mock_request2)
     # print(response2)
 
-    mock_request3 = MockRequest(path="/user_handler/read", method="GET")
-    response3 = user_handler(mock_request3)
+    # mock_request3 = MockRequest(path="/order_handler/read", method="GET")
+    # response3 = user_handler(mock_request3)
+    # print(response3)
+
+    mock_request3 = MockRequest(path="/order_handler/read/30_Oct_2023_10_54_31_583", method="GET")
+    response3 = order_handler(mock_request3)
     print(response3)
 
 
