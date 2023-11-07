@@ -1,7 +1,7 @@
 import json
 
-from costs.alerts.handle_alerts import decode_dict_from_google_cloud_request, \
-    extract_meaningful_info_from_decoded_dict, send_cloud_warning_email
+from costs.alerts.handle_alerts import (decode_dict_from_google_cloud_request, extract_meaningful_info_from_decoded_dict,
+                                        send_cloud_warning_email)
 from cruds.conversation_crud import get_all_conversations, update_conversation, update_multiple_conversations
 from cruds.order_crud import delete_order, update_order, read_all_orders, create_order
 from cruds.user_crud import create_user, get_all_users, update_user, delete_user
