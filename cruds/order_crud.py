@@ -31,12 +31,27 @@ def create_order(request):
     return createResponseWithAntiCorsHeaders(response)
 
 
-def read_all_orders(request):
+def get_order_handler(request):
     if request is None or request.method != "GET":
         return "Only GET requests are accepted", 405
+    unique_id = request.headers.get('url_parameter')
+    if unique_id:
+        return read_order_by_id(unique_id)
+    else:
+        return read_all_orders()
+
+
+def read_all_orders():
     orders = fo.getAllOrders()
-    arrayOfOrders = list(orders.values()) if orders is not None else ["None"]
+    arrayOfOrders = list(orders.values()) if orders is not None else []
     return createResponseWithAntiCorsHeaders(arrayOfOrders)
+
+
+def read_order_by_id(order_id):
+    if order_id is None:
+        return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
+    order = fo.getOrder(order_unique_id=order_id)
+    return createResponseWithAntiCorsHeaders(order)
 
 
 def update_order(request):
