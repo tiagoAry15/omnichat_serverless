@@ -81,7 +81,7 @@ jobs:
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
-            --stage-bucket=firebase_code_bucket \
+            --stage-bucket=pizza_code_bucket \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
 
  #     - name: Deploy user_handler Cloud Function
