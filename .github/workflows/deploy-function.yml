@@ -9,6 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
+      CURRENT_BUCKET: pizza_code_bucket
       SDK_TYPE: ${{ secrets.SDK_TYPE }}
       SDK_PROJECT_ID: ${{ secrets.SDK_PROJECT_ID }}
       SDK_PRIVATE_KEY_ID: ${{ secrets.SDK_PRIVATE_KEY_ID }}
@@ -18,8 +19,8 @@ jobs:
       SDK_CLIENT_X509_CERT_URL: ${{ secrets.SDK_CLIENT_X509_CERT_URL }}
       FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
       FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
-      INSTAGRAM_EMAIL: ${{ secrets.INSTAGRAM_EMAIL }}
-      INSTAGRAM_PASSWORD: ${{ secrets.INSTAGRAM_PASSWORD }}
+      FIREBASE_USERNAME: ${{ secrets.FIREBASE_USERNAME }}
+      FIREBASE_PASSWORD: ${{ secrets.FIREBASE_PASSWORD }}
       SEND_GMAIL_USERNAME: ${{ secrets.SEND_GMAIL_USERNAME }}
       SEND_GMAIL_APP_PASSWORD: ${{ secrets.SEND_GMAIL_APP_PASSWORD }}
       TEST_SECRET: ${{ secrets.TEST_SECRET }}
@@ -38,6 +39,7 @@ jobs:
       - name: Set .env vars for Cloud Run deployment
         run: |# Create an array with all the environment variable assignments
           ENV_VARS_ARRAY=(
+            "CURRENT_BUCKET=${CURRENT_BUCKET}"
             "SDK_TYPE=${SDK_TYPE}"
             "SDK_PROJECT_ID=${SDK_PROJECT_ID}"
             "SDK_PRIVATE_KEY=${SDK_PRIVATE_KEY}"
@@ -47,8 +49,8 @@ jobs:
             "SDK_CLIENT_X509_CERT_URL=${SDK_CLIENT_X509_CERT_URL}"
             "FIREBASE_DATABASE_URL=${FIREBASE_DATABASE_URL}"
             "FIREBASE_API_KEY=${FIREBASE_API_KEY}"
-            "INSTAGRAM_EMAIL=${INSTAGRAM_EMAIL}"
-            "INSTAGRAM_PASSWORD=${INSTAGRAM_PASSWORD}"
+            "FIREBASE_USERNAME=${FIREBASE_USERNAME}"
+            "FIREBASE_PASSWORD=${FIREBASE_PASSWORD}"
             "SEND_GMAIL_APP_PASSWORD=${SEND_GMAIL_APP_PASSWORD}"
             "SEND_GMAIL_USERNAME=${SEND_GMAIL_USERNAME}"
           )
@@ -58,19 +60,19 @@ jobs:
           
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
 
-#      - name: Deploy conversation_handler Cloud Function
-#        run: |
-#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-#          gcloud functions deploy conversation_handler \
-#            --source=. \
-#            --runtime=python39 \
-#            --entry-point=conversation_handler \
-#            --memory 128MB \
-#            --trigger-http \
-#            --allow-unauthenticated \
-#            --stage-bucket=firebase_code_bucket \
-#            --update-env-vars=$UPDATE_ENV_VARS_ARG
-#
+      - name: Deploy conversation_handler Cloud Function
+        run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+          gcloud functions deploy conversation_handler \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=conversation_handler \
+            --memory 128MB \
+            --trigger-http \
+            --allow-unauthenticated \
+            --stage-bucket=${{ env.CURRENT_BUCKET } \
+            --update-env-vars=$UPDATE_ENV_VARS_ARG
+
       - name: Deploy order_handler Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
@@ -81,21 +83,21 @@ jobs:
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
-            --stage-bucket=pizza_code_bucket \
+            --stage-bucket=${{ env.CURRENT_BUCKET } \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
 
- #     - name: Deploy user_handler Cloud Function
- #     run: |
- #       echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
- #         gcloud functions deploy user_handler \
- #           --source=. \
- #           --runtime=python39 \
- #           --entry-point=user_handler \
- #           --memory 128MB \
- #           --trigger-http \
- #           --allow-unauthenticated \
- #           --stage-bucket=firebase_code_bucket \
- #           --update-env-vars=$UPDATE_ENV_VARS_ARG
+      - name: Deploy user_handler Cloud Function
+        run: |
+          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+          gcloud functions deploy user_handler \
+            --source=. \
+            --runtime=python39 \
+            --entry-point=user_handler \
+            --memory 128MB \
+            --trigger-http \
+            --allow-unauthenticated \
+            --stage-bucket=firebase_code_bucket \
+            --update-env-vars=$UPDATE_ENV_VARS_ARG
 
 #      - name: Deploy budget_alert Cloud Function
 #        run: |
