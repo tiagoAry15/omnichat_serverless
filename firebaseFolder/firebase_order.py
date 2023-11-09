@@ -1,5 +1,6 @@
 import datetime
 
+from authentication.abstraction.abstract_connection import AbstractFirebaseConnection
 from authentication.sdk_auth.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 from utils.patterns import singleton
@@ -7,7 +8,7 @@ from utils.patterns import singleton
 
 @singleton
 class FirebaseOrder(FirebaseWrapper):
-    def __init__(self, inputFirebaseConnection: FirebaseSDKConnection):
+    def __init__(self, inputFirebaseConnection: AbstractFirebaseConnection):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
 
@@ -20,7 +21,8 @@ class FirebaseOrder(FirebaseWrapper):
     def createOrder(self, order_data):
         now = datetime.datetime.now().strftime("%d_%b_%Y_%H_%M_%S_%f")[:-3]
         order_data["timestamp"] = now
-        return self.firebaseConnection.writeData(path=f'orders/', data=order_data)
+        self.firebaseConnection.writeDataWithoutUniqueId(path=f'orders/{now}', data=order_data)
+        return now
 
     def getOrder(self, order_unique_id: str):
         return self.firebaseConnection.getValue(f'orders/{order_unique_id}')

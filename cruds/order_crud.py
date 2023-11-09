@@ -42,6 +42,9 @@ def create_order(request):
                                                 for field, status in item_status.items()])
         return response, 400
 
+    result: bool = fo.createOrder(order_data=data)
+    return createResponseWithAntiCorsHeaders(f"Successfully created order with unique ID [{result}]")
+
 
 def get_order_handler(request):
     if request is None or request.method != "GET":
