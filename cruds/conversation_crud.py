@@ -49,11 +49,11 @@ def update_multiple_conversations(request=None):
         userMessage = payload["userMessage"]
         botAnswer = payload["botAnswer"]
         metaData = payload["metaData"]
-
+        metaData.pop("userMessage")
         phoneNumber = metaData["phoneNumber"]
         userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%H:%M'), **metaData}
-        botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'), **metaData,
-                          "sender": "Bot"}
+        botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%H:%M'),**metaData,
+                          "sender": "Bot" }
         messagePot = [userMessageDict, botMessageDict]
 
         result = fcm.appendMultipleMessagesToWhatsappNumber(messagesData=messagePot, whatsappNumber=phoneNumber)

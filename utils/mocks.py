@@ -118,6 +118,15 @@ mock_order_2 = {
     "status": "Em preparação",
 }
 
+update_mult_conv_mock = {
+    'botAnswer': 'Não foi possível se conectar ao fulfillment do dialogflow! Por favor, ligue a API',
+    'metaData': {
+        'from': ['whatsapp', '+558599663533'],
+        'phoneNumber': '558599663533',
+        'sender': 'Tiago',
+        'userMessage': 'oi'},
+    'userMessage': 'oi'}
+
 
 def __main():
     conversation_mock = test_create_conversation_mock()
