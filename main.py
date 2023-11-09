@@ -6,7 +6,7 @@ from cruds.conversation_crud import get_all_conversations, update_conversation, 
 from cruds.order_crud import delete_order, update_order, get_order_handler, create_order
 from cruds.user_crud import create_user, get_all_users, update_user, delete_user
 from factory.core_instantiations import ft
-from utils.mocks import MockRequest
+from utils.mocks import MockRequest, mock_order_1, mock_order_2
 
 
 def __crud_function_redirect(operation_dict, request):
@@ -96,10 +96,14 @@ def __main():
     # response3 = user_handler(mock_request3)
     # print(response3)
 
-    mock_request3 = MockRequest(path="/order_handler/read/30_Oct_2023_10_54_31_583", method="GET")
-    response3 = order_handler(mock_request3)
-    print(response3)
 
+    # mock_request4 = MockRequest(path="/order_handler/read/30_Oct_2023_10_54_31_583", method="GET")
+    # response4 = order_handler(mock_request3)
+    # print(response4)
+
+    mock_request5 = MockRequest(path="/order_handler/create", method="POST", json_data=mock_order_2, headers={'Content-Type': 'application/json'})
+    response5 = order_handler(mock_request5)
+    print(response5)
 
 if __name__ == '__main__':
     __main()
