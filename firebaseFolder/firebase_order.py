@@ -19,7 +19,8 @@ class FirebaseOrder(FirebaseWrapper):
 
     def createOrder(self, order_data):
         now = datetime.datetime.now().strftime("%d_%b_%Y_%H_%M_%S_%f")[:-3]
-        return self.firebaseConnection.writeData(path=now, data=order_data)
+        order_data["timestamp"] = now
+        return self.firebaseConnection.writeData(path=f'orders/', data=order_data)
 
     def getOrder(self, order_unique_id: str):
         return self.firebaseConnection.getValue(f'orders/{order_unique_id}')
