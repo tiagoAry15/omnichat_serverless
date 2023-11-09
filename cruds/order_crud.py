@@ -16,19 +16,31 @@ def create_order(request):
         return f'Invalid JSON payload: {e}', 400
 
     REQUIRED_FIELDS = ["customerName", "status", "address", "platform", "communication", "orderItems"]
-    missing_fields = [field for field in REQUIRED_FIELDS if field not in data]
-    if missing_fields:
-        return f"{', '.join(missing_fields)} cannot be empty", 400
+    field_statuses = {field: 'OK' for field in REQUIRED_FIELDS}
 
-    for item in data["orderItems"]:
-        REQUIRED_ITEM_FIELDS = ["type", "flavors", "size", "quantity", "price"]
-        missing_item_fields = [field for field in REQUIRED_ITEM_FIELDS if field not in item]
-        if missing_item_fields:
-            return f"In orderItems, {', '.join(missing_item_fields)} cannot be empty", 400
+    for field in REQUIRED_FIELDS:
+        if field not in data:
+            field_statuses[field] = 'missing'
 
-    unique_id = fo.createOrder(order_data=data)
-    response = f'Order created successfully! UniqueID = {unique_id}', 200
-    return createResponseWithAntiCorsHeaders(response)
+    order_items_status = []
+    if "orderItems" in data:
+        for item in data["orderItems"]:
+            REQUIRED_ITEM_FIELDS = ["type", "flavors", "size", "quantity", "price"]
+            item_status = {field: 'OK' for field in REQUIRED_ITEM_FIELDS}
+            for field in REQUIRED_ITEM_FIELDS:
+                if field not in item:
+                    item_status[field] = 'missing'
+            order_items_status.append(item_status)
+    else:
+        field_statuses["orderItems"] = 'missing'
+
+    if any(status == 'missing' for status in field_statuses.values()):
+        response = ' | '.join([f'{field} → {status}' for field, status in field_statuses.items()])
+        if order_items_status:
+            for index, item_status in enumerate(order_items_status):
+                response += ' | ' + ' | '.join([f'orderItem {index+1} {field} → {status}'
+                                                for field, status in item_status.items()])
+        return response, 400
 
 
 def get_order_handler(request):
