@@ -14,7 +14,14 @@ def __crud_function_redirect(operation_dict, request):
     path_segments = request.path.split('/')
     operation = path_segments[-1]
     url_parameter = None
-
+    if request.method == 'OPTIONS':
+        headers = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Max-Age": "3600",
+        }
+        return '', 204, headers
     if operation not in operation_dict:
         if len(path_segments) > 2 and path_segments[-2] in operation_dict:
             operation = path_segments[-2]
@@ -45,6 +52,7 @@ def conversation_handler(request):
         "get_all_conversations": ("GET", get_all_conversations),
         "update_conversation": ("PUT", update_conversation),
         "update_multiple_conversations": ("PUT", update_multiple_conversations)
+
     }
 
     return __crud_function_redirect(operation_dict, request)
