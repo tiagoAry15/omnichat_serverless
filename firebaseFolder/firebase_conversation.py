@@ -54,7 +54,7 @@ class FirebaseConversation(FirebaseWrapper):
             return 400, "Whatsapp number is empty."
         if not sender:
             return 400, "Sender is empty."
-        messageData = {"body": body, "time": datetime.datetime.now().strftime("%H:%M"), "id": str(uuid.uuid4())}
+        messageData = {"body": body, "timestamp": datetime.datetime.now().strftime("%H:%M"), "id": str(uuid.uuid4())}
         conversationUniqueId = self.getUniqueIdByWhatsappNumber(whatsappNumber)
         if not conversationUniqueId:
             return 400, f"Conversation not found for whatsappNumber: {whatsappNumber}"

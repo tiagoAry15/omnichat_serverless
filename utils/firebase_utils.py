@@ -16,7 +16,7 @@ def organizeSingleMessageData(messageData: list[dict], whatsappNumber: str, all_
     if uniqueId:
         conversationData = all_conversations[uniqueId]
         conversationData["messagePot"] += newMessagePot
-        conversationData['lastMessage_timestamp'] = newMessagePot[-1]['time']
+        conversationData['lastMessage_timestamp'] = newMessagePot[-1]['timestamp']
         conversationData['unreadMessages'] += len(newMessagePot)
         return uniqueId, conversationData
     else:
@@ -27,7 +27,7 @@ def organizeSingleMessageData(messageData: list[dict], whatsappNumber: str, all_
             "from": messageData[0]['from'],
             "messagePot": newMessagePot,
             "unreadMessages": len(newMessagePot),
-            "lastMessage_timestamp": newMessagePot[-1]['time'],
+            "lastMessage_timestamp": newMessagePot[-1]['timestamp'],
             "isBotActive": True,
         }
         return None, conversationData

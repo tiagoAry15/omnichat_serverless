@@ -51,8 +51,8 @@ def update_multiple_conversations(request=None):
         metaData = payload["metaData"]
         metaData.pop("userMessage")
         phoneNumber = metaData["phoneNumber"]
-        userMessageDict = {"body": userMessage, "time": datetime.datetime.now().strftime('%d-%b-%Y %H:%M'), **metaData}
-        botMessageDict = {"body": botAnswer, "time": datetime.datetime.now().strftime('%d-%b-%Y %H:%M'),**metaData,
+        userMessageDict = {"body": userMessage, "timestamp": datetime.datetime.now().strftime('%d-%b-%Y %H:%M'), **metaData}
+        botMessageDict = {"body": botAnswer, "timestamp": datetime.datetime.now().strftime('%d-%b-%Y %H:%M'),**metaData,
                           "sender": "Bot"}
         messagePot = [userMessageDict, botMessageDict]
 
