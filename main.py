@@ -21,6 +21,7 @@ def __crud_function_redirect(operation_dict, request):
             "Access-Control-Allow-Headers": "Content-Type",
             "Access-Control-Max-Age": "3600",
         }
+
         return '', 204, headers
     if operation not in operation_dict:
         if len(path_segments) > 2 and path_segments[-2] in operation_dict:
