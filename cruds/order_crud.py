@@ -90,7 +90,7 @@ def update_order(request):
 def delete_order(request):
     if request is None or request.method != 'DELETE':
         return 'Only DELETE requests are accepted', 405
-    url_param = get_url_param()
+    url_param = request.headers.get('url_parameter')
     if url_param is None:
         return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     order_id = url_param
