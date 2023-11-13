@@ -38,8 +38,8 @@ def get_all_users(request=None):
     if request is None or request.method != 'GET':
         return 'Only GET requests are accepted', 405
     all_users_data = fu.getAllUsers()
-
-    return createResponseWithAntiCorsHeaders(all_users_data, 200)
+    response = [] if all_users_data is None else all_users_data
+    return createResponseWithAntiCorsHeaders(response, 200)
 
 
 def update_user(request=None):
