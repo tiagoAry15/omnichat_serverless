@@ -4,7 +4,7 @@ from requests import JSONDecodeError
 
 from cruds.crud_utils import get_url_param
 from factory.core_instantiations import fu
-from utils.corsBlocker import getAntiCorsHeaders
+from utils.corsBlocker import getAntiCorsHeaders, createResponseWithAntiCorsHeaders
 
 
 def validate_request(request, expected_method):
@@ -30,15 +30,16 @@ def create_user(request=None):
         return f'Invalid JSON payload: {e}', 400
     unique_id = fu.createUser(userData=data)
     response = f'User created successfully! UniqueID = {unique_id}'
-    headers = getAntiCorsHeaders()
-    return response, 200, headers
+
+    return createResponseWithAntiCorsHeaders(response, response_code=200)
 
 
 def get_all_users(request=None):
     if request is None or request.method != 'GET':
         return 'Only GET requests are accepted', 405
     all_users_data = fu.getAllUsers()
-    return all_users_data, 200
+
+    return createResponseWithAntiCorsHeaders(all_users_data, 200)
 
 
 def update_user(request=None):
@@ -55,8 +56,7 @@ def update_user(request=None):
     result: bool = fu.updateUser(user_unique_id=user_id, userData=data)
     response = "User updated successfully" if result else f"Error updating user, user {user_id} does not exist"
     response_code = 200 if result else 500
-    headers = getAntiCorsHeaders()
-    return response, response_code, headers
+    return createResponseWithAntiCorsHeaders(response, response_code=response_code)
 
 
 def delete_user(request=None):
@@ -69,5 +69,4 @@ def delete_user(request=None):
     result: bool = fu.deleteUser(user_unique_id=user_id)
     response = "User deleted successfully" if result else f"Error deleting user, user {user_id} does not exist"
     response_code = 200 if result else 500
-    headers = getAntiCorsHeaders()
-    return response, response_code, headers
+    return createResponseWithAntiCorsHeaders(response, response_code=response_code)
