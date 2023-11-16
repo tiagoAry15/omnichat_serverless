@@ -73,31 +73,31 @@ jobs:
 #            --stage-bucket=$CURRENT_BUCKET \
 #            --update-env-vars=$UPDATE_ENV_VARS_ARG
 #
-#      - name: Deploy order_handler Cloud Function
-#        run: |
-#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-#          gcloud functions deploy order_handler \
-#            --source=. \
-#            --runtime=python39 \
-#            --entry-point=order_handler \
-#            --memory 128MB \
-#            --trigger-http \
-#            --allow-unauthenticated \
-#            --stage-bucket=$CURRENT_BUCKET \
-#            --update-env-vars=$UPDATE_ENV_VARS_ARG
-
-      - name: Deploy user_handler Cloud Function
+      - name: Deploy order_handler Cloud Function
         run: |
           echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
-          gcloud functions deploy user_handler \
+          gcloud functions deploy order_handler \
             --source=. \
             --runtime=python39 \
-            --entry-point=user_handler \
+            --entry-point=order_handler \
             --memory 128MB \
             --trigger-http \
             --allow-unauthenticated \
             --stage-bucket=$CURRENT_BUCKET \
             --update-env-vars=$UPDATE_ENV_VARS_ARG
+#
+#      - name: Deploy user_handler Cloud Function
+#        run: |
+#          echo "Deploying with env vars: $UPDATE_ENV_VARS_ARG"
+#          gcloud functions deploy user_handler \
+#            --source=. \
+#            --runtime=python39 \
+#            --entry-point=user_handler \
+#            --memory 128MB \
+#            --trigger-http \
+#            --allow-unauthenticated \
+#            --stage-bucket=$CURRENT_BUCKET \
+#            --update-env-vars=$UPDATE_ENV_VARS_ARG
 
 #      - name: Deploy budget_alert Cloud Function
 #        run: |
