@@ -5,7 +5,7 @@ from flask import jsonify, Response
 
 def createResponseWithAntiCorsHeaders(data, response_code=200):
     # Converte os dados para JSON
-    dump_response = jsonify(data)
+    dump_response = json.dumps(data)
 
     # Define os cabeçalhos para permitir CORS
     response_headers = {
@@ -15,7 +15,7 @@ def createResponseWithAntiCorsHeaders(data, response_code=200):
     }
 
     # Cria a resposta com os cabeçalhos e o código de status
-    response = Response(dump_response.data, status=response_code, headers=response_headers)
+    response = Response(dump_response, status=response_code, headers=response_headers)
     response.mimetype = "application/json"
     return response
 def getAntiCorsHeaders():

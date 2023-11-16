@@ -11,7 +11,7 @@ def create_order(request):
     if request is None or request.method != 'POST':
         return 'Only POST requests are accepted', 405
     try:
-        data = request.get_json(force=True)
+        data = request.json
     except JSONDecodeError as e:
         return f'Invalid JSON payload: {e}', 400
 
@@ -43,7 +43,7 @@ def create_order(request):
         return response, 400
 
     result: bool = fo.createOrder(order_data=data)
-    return createResponseWithAntiCorsHeaders(f"Successfully created order with unique ID [{result}]")
+    return createResponseWithAntiCorsHeaders(result)
 
 
 def get_order_handler(request):
