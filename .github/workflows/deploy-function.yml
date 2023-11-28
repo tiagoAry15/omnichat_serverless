@@ -59,6 +59,8 @@ jobs:
            # Join the array elements into a comma-separated string
           UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
           echo "UPDATE_ENV_VARS_ARG contents:"
+          echo "${ENV_VARS_ARRAY[@]}"
+          echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG"
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
     
 
