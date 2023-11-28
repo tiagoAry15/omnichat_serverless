@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      CURRENT_BUCKET: pizza_code_bucket
+      CURRENT_BUCKET: omnichat_bucket
       SDK_TYPE: ${{ secrets.SDK_TYPE }}
       SDK_PROJECT_ID: ${{ secrets.SDK_PROJECT_ID }}
       SDK_PRIVATE_KEY_ID: ${{ secrets.SDK_PRIVATE_KEY_ID }}
@@ -57,7 +57,7 @@ jobs:
            # Join the array elements into a comma-separated string
           UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
-          CURRENT_BUCKET=pizza_code_bucket
+          CURRENT_BUCKET=omnichat_bucket
           echo "CURRENT_BUCKET=$CURRENT_BUCKET" >> $GITHUB_ENV
 
       - name: Deploy conversation_handler Cloud Function
