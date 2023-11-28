@@ -52,7 +52,8 @@ def test_create_update_conversation_mock():
 
     return MockRequest(method="GET")
 
-
+mock_user_1 = {"address": "Rua da Paz 4987", "cpf": "14568598577", "name": "Ednaldo Pereira",
+            "phoneNumber": "558597648583"}
 mock_order_1 = {
     "address": "Rua da Justiça 9584",
     "communication": "Janderson@bol.com.br",

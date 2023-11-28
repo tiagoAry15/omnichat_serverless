@@ -53,7 +53,7 @@ def update_user(request=None):
     except JSONDecodeError as e:
         return f'Invalid JSON payload: {e}', 400
     user_id = url_param
-    result: bool = fu.updateUser(userData=data)
+    result: bool = fu.updateUser(userUID=user_id, userData=data)
     response = "User updated successfully" if result else f"Error updating user, user {user_id} does not exist"
     response_code = 200 if result else 500
     return createResponseWithAntiCorsHeaders(response, response_code=response_code)

@@ -45,10 +45,10 @@ class FirebaseUser(FirebaseWrapper):
             return False
         return self.firebaseConnection.writeData(data=userData)
 
-    def updateUser(self, userData: dict) -> bool:
+    def updateUser(self, userUID, userData: dict) -> bool:
         existingUser = self.existingUser(userData)
         return (
-            self.firebaseConnection.overWriteData(data=userData)
+            self.firebaseConnection.overWriteData(path=f'users/{userUID}', data=userData)
             if existingUser
             else False
         )
