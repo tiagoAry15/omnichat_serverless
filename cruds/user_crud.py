@@ -45,7 +45,7 @@ def get_all_users(request=None):
 def update_user(request=None):
     if request is None or request.method != 'PUT':
         return 'Only PUT requests are accepted', 405
-    url_param = get_url_param()
+    url_param = request.headers.get('url_parameter')
     if url_param is None:
         return "'url_parameter' cannot be empty. There was no url parameter in the request", 400
     try:
@@ -53,7 +53,7 @@ def update_user(request=None):
     except JSONDecodeError as e:
         return f'Invalid JSON payload: {e}', 400
     user_id = url_param
-    result: bool = fu.updateUser(user_unique_id=user_id, userData=data)
+    result: bool = fu.updateUser(userData=data)
     response = "User updated successfully" if result else f"Error updating user, user {user_id} does not exist"
     response_code = 200 if result else 500
     return createResponseWithAntiCorsHeaders(response, response_code=response_code)

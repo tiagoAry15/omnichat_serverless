@@ -99,22 +99,22 @@ def __main():
         "Content-Type": "application/json"}
 
     # Mocked data for a read operation with a user_id
-    # body = {"address": "Rua da Paz 4987", "cpf": "14568598577", "name": "Ednaldo Pereira",
-    #         "phoneNumber": "+558597648593"}
-    # mock_request2 = MockRequest(path="/user_handler/create", method="POST", json_data=body)
-    # response2 = user_handler(mock_request2)
-    # print(response2)
+    body = {"address": "Rua da Paz 4987", "cpf": "14568598577", "name": "Ednaldo Pereira",
+            "phoneNumber": "558597648583"}
+    mock_request2 = MockRequest(path="/user_handler/update/NkLuuUc5ArXd6utuICg", method="PUT", json_data=body, headers=headers)
+    response2 = user_handler(mock_request2)
+    print(response2)
 
-    mock_request3 = MockRequest(path="/order_handler/create", method="POST", headers=headers, json_data=mock_order_1)
-    response3 = order_handler(mock_request3)
-    print(response3)
+    # mock_request3 = MockRequest(path="/order_handler/create", method="POST", headers=headers, json_data=mock_order_1)
+    # response3 = order_handler(mock_request3)
+    # print(response3)
 
 
     # mock_request4 = MockRequest(path="/order_handler/read/30_Oct_2023_10_54_31_583", method="GET")
     # response4 = order_handler(mock_request3)
     # print(response4)
 
-    # mock_request5 = MockRequest(path="/order_handler/delete/2", method="DELETE", json_data=mock_order_2, headers={'Content-Type': 'application/json'})
+    # mock_request5 = MockRequest(path="/order_handler/update/2", method="DELETE", json_data=mock_order_2, headers={'Content-Type': 'application/json'})
     # response5 = order_handler(mock_request5)
     # print(response5)
 
