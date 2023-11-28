@@ -31,10 +31,10 @@ class FirebaseOrder(FirebaseWrapper):
         order = self.getOrder(order_unique_id)
         for key in order_data.keys():
             order[key] = order_data[key]
-        return self.firebaseConnection.setValue(order_unique_id, order)
+        return self.firebaseConnection.setValue(f'orders/{order_unique_id}', order)
 
     def deleteOrder(self, order_unique_id: str):
-        return self.firebaseConnection.deleteData(order_unique_id)
+        return self.firebaseConnection.deleteData(f'orders/{order_unique_id}')
 
 
 def __main():
