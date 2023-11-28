@@ -56,6 +56,7 @@ jobs:
 
            # Join the array elements into a comma-separated string
           UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
+          echo "UPDATE_ENV_VARS_ARG contents:"
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
           CURRENT_BUCKET=omnichat_bucket
           echo "CURRENT_BUCKET=$CURRENT_BUCKET" >> $GITHUB_ENV
