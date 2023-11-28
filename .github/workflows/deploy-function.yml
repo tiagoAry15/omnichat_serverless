@@ -52,14 +52,15 @@ jobs:
             "FIREBASE_PASSWORD=${FIREBASE_PASSWORD}"
             "SEND_GMAIL_APP_PASSWORD=${SEND_GMAIL_APP_PASSWORD}"
             "SEND_GMAIL_USERNAME=${SEND_GMAIL_USERNAME}"
+            "TEST_SECRET=${TEST_SECRET}"
+            "CURRENT_BUCKET=${CURRENT_BUCKET}"
           )
 
            # Join the array elements into a comma-separated string
           UPDATE_ENV_VARS_ARG=$(IFS=,; echo "${ENV_VARS_ARRAY[*]}")
           echo "UPDATE_ENV_VARS_ARG contents:"
           echo "UPDATE_ENV_VARS_ARG=$UPDATE_ENV_VARS_ARG" >> $GITHUB_ENV
-          CURRENT_BUCKET=omnichat_bucket
-          echo "CURRENT_BUCKET=$CURRENT_BUCKET" >> $GITHUB_ENV
+    
 
       - name: Deploy conversation_handler Cloud Function
         run: |
