@@ -119,14 +119,7 @@ mock_order_2 = {
     "status": "Em preparação",
 }
 
-update_mult_conv_mock = {
-    'botAnswer': 'Não foi possível se conectar ao fulfillment do dialogflow! Por favor, ligue a API',
-    'metaData': {
-        'from': ['whatsapp', '+558599663533'],
-        'phoneNumber': '558599663533',
-        'sender': 'Tiago',
-        'userMessage': 'oi'},
-    'userMessage': 'oi'}
+update_mult_conv_mock = {"userMessage": "vou querer um guaraná e dois sucos de laranja", "botAnswer": "Vou é um tipo de endereço inválido. Por favor, use um tipo válido por exemplo Rua, Avenida, Travessa, etc)", "metaData": {"sender": "Tiago", "from": ["whatsapp", "+558599663533"], "phoneNumber": "558599663533", "userMessage": "vou querer um guaraná e dois sucos de laranja", "ip": "127.0.0.1"}}
 
 
 def __main():
