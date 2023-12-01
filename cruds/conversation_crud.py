@@ -1,11 +1,12 @@
 import datetime
 import json
+import pytz
 
 from factory.core_instantiations import fcm
 from utils.cloudFunctionsUtils import log_memory_usage
 from utils.corsBlocker import createResponseWithAntiCorsHeaders
 
-
+timezone = pytz.timezone("America/Sao_Paulo")
 def get_all_conversations(request=None):
     if request.method != 'GET':
         return 'Only GET requests are accepted', 405
@@ -52,8 +53,8 @@ def update_multiple_conversations(request=None):
         metaData = payload["metaData"]
         metaData.pop("userMessage")
         phoneNumber = metaData["phoneNumber"]
-        userMessageDict = {"body": userMessage, "timestamp": datetime.datetime.now().strftime('%d-%b-%Y %H:%M'), **metaData}
-        botMessageDict = {"body": botAnswer, "timestamp": datetime.datetime.now().strftime('%d-%b-%Y %H:%M'),**metaData,
+        userMessageDict = {"body": userMessage, "timestamp": datetime.datetime.now(timezone).strftime('%d-%b-%Y %H:%M:%S.%f')[:-3], **metaData}
+        botMessageDict = {"body": botAnswer, "timestamp": datetime.datetime.now(timezone).strftime('%d-%b-%Y %H:%M:%S.%f')[:-3], **metaData,
                           "sender": "Bot"}
         messagePot = [userMessageDict, botMessageDict]
 

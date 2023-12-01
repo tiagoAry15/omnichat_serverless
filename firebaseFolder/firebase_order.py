@@ -1,13 +1,16 @@
 import datetime
-
+import pytz
 from authentication.abstraction.abstract_connection import AbstractFirebaseConnection
 from authentication.sdk_auth.firebase_sdk_connection import FirebaseSDKConnection
 from firebaseFolder.firebase_core_wrapper import FirebaseWrapper
 from utils.patterns import singleton
 
-
+timezone = pytz.timezone("America/Sao_Paulo")
 @singleton
 class FirebaseOrder(FirebaseWrapper):
+
+
+
     def __init__(self, inputFirebaseConnection: AbstractFirebaseConnection):
         super().__init__()
         self.firebaseConnection = inputFirebaseConnection
@@ -19,7 +22,7 @@ class FirebaseOrder(FirebaseWrapper):
         return self.firebaseConnection.readData()
 
     def createOrder(self, order_data):
-        now = datetime.datetime.now().strftime("%d_%b_%Y_%H_%M_%S_%f")[:-3]
+        now = datetime.datetime.now(timezone).strftime("%d_%b_%Y_%H_%M_%S_%f")[:-3]
         order_data["timestamp"] = now
         self.firebaseConnection.writeDataWithoutUniqueId(path=f'orders/{now}', data=order_data)
         return now

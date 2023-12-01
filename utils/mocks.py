@@ -90,33 +90,34 @@ mock_order_1 = {
 mock_order_2 = {
     "address": "Rua Marcos Macedo 700",
     "communication": "558599663533",
-    "customerName": "Mateus",
-    "observation": "None",
+    "customerName": "Nestor",
+    "observation": "Tirar azeitona",
     "orderItems": [
-        {
-            "type": "pizza",
-            "flavors": ["Portuguesa"],
-            "size": "Large",
-            "quantity": 1,
-            "price": 15.00
-        },
+
         {
             "type": "drink",
-            "flavors": ["Guaraná"],
+            "flavors": ["Coca-Cola"],
             "size": "2L",
             "quantity": 1,
             "price": 2.50
         },
         {
             "type": "pizza",
-            "flavors": ["Margarita", "Frango com Catupiry"],
+            "flavors": ["Marguerita", "Calabresa"],
+            "size": "Large",
+            "quantity": 1,
+            "price": 17.00
+        },
+        {
+            "type": "pizza",
+            "flavors": ["Portuguesa", "4 Queijos"],
             "size": "Large",
             "quantity": 1,
             "price": 17.00
         }
     ],
-    "platform": "WhatsApp",
-    "status": "Em preparação",
+    "platform": "Instagram",
+    "status": "Cancelado",
 }
 
 update_mult_conv_mock = {"userMessage": "vou querer um guaraná e dois sucos de laranja", "botAnswer": "Vou é um tipo de endereço inválido. Por favor, use um tipo válido por exemplo Rua, Avenida, Travessa, etc)", "metaData": {"sender": "Tiago", "from": ["whatsapp", "+558599663533"], "phoneNumber": "558599663533", "userMessage": "vou querer um guaraná e dois sucos de laranja", "ip": "127.0.0.1"}}
