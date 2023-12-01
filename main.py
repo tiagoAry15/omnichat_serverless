@@ -7,7 +7,7 @@ from cruds.conversation_crud import get_all_conversations, update_conversation, 
 from cruds.order_crud import delete_order, update_order, get_order_handler, create_order
 from cruds.user_crud import create_user, get_all_users, update_user, delete_user
 from factory.core_instantiations import ft
-from utils.mocks import MockRequest, mock_order_1, mock_order_2, update_mult_conv_mock, mock_user_1
+from utils.mocks import MockRequest, mock_order_1, mock_order_2, update_mult_conv_mock, mock_user_1, mock_orders
 
 
 def __crud_function_redirect(operation_dict, request):
@@ -98,22 +98,20 @@ def __main():
     headers = {
         "Content-Type": "application/json"}
 
-  # #  Mocked data for a read operation with a user_id
-  #   body = {"address": "Rua da Paz 4987", "cpf": "14588598577", "name": "Ednaldo Pereira",
-  #           "phoneNumber": "558597648583"}
-  #   mock_request2 = MockRequest(path="/user_handler/update/-NkMXXVXxSO1GEhPW3oU", method="PUT", json_data=body, headers=headers)
-  #   response2 = user_handler(mock_request2)
-  #   print(response2)
+    # #  Mocked data for a read operation with a user_id
+    #   body = {"address": "Rua da Paz 4987", "cpf": "14588598577", "name": "Ednaldo Pereira",
+    #           "phoneNumber": "558597648583"}
+    #   mock_request2 = MockRequest(path="/user_handler/update/-NkMXXVXxSO1GEhPW3oU", method="PUT", json_data=body, headers=headers)
+    #   response2 = user_handler(mock_request2)
+    #   print(response2)
 
     # mock_request3 = MockRequest(path="/user_handler/create", method="POST", headers=headers, json_data=mock_user_1)
     # response3 = user_handler(mock_request3)
     # print(response3)
 
-
-
-    # mock_request35 = MockRequest(path="/order_handler/create", method="POST", headers=headers, json_data=mock_order_2)
-    # response35 = order_handler(mock_request35)
-    # print(response35)
+    for order in mock_orders:
+        mock_request35 = MockRequest(path="/order_handler/create", method="POST", headers=headers, json_data=order)
+        response35 = order_handler(mock_request35)
 
     # mock_request4 = MockRequest(path="/order_handler/read/30_Oct_2023_10_54_31_583", method="GET")
     # response4 = order_handler(mock_request3)
@@ -126,9 +124,9 @@ def __main():
     # mock_request5 = MockRequest(path="/conversation_handler/update_multiple_conversations", method="PUT", json_data=update_mult_conv_mock, headers={'Content-Type': 'application/json'})
     # response5 = conversation_handler(mock_request5)
     # print(response5)
-    mock_request5 = MockRequest(path="/conversation_handler/get_all_conversations", method="GET")
-    response5 = conversation_handler(mock_request5)
-    print(response5)
+    # mock_request5 = MockRequest(path="/conversation_handler/get_all_conversations", method="GET")
+    # response5 = conversation_handler(mock_request5)
+    # print(response5)
 
 
 if __name__ == '__main__':
